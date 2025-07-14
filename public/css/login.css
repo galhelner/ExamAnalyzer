@@ -1,0 +1,37 @@
+body {
+    background-color: #e7fbff;
+}
+
+p {
+    font-size: small;
+}
+
+.login-button {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    font-size: medium;
+    width: 60%;
+    background-color: #449aac;
+    color: white;
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: #367a8c;
+}
+
+.login-button:hover {
+    background-color: #367a8c;
+}
+
+.form-control {
+    background-color: #e0dede;
+}
+
+.form-control:focus {
+    background-color: #e0dede;
+    border-color: #367a8c;
+}
+
+.form-label {
+    font-size: small;
+}

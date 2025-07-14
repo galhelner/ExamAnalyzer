@@ -24,12 +24,11 @@ p {
 }
 
 .form-control {
-    background-color: #e0dede;
+    background-color: #f3f2f2;
 }
 
 .form-control:focus {
-    background-color: #e0dede;
-    border-color: #367a8c;
+    background-color: #f3f2f2;
 }
 
 .form-label {

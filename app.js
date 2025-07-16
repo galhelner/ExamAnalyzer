@@ -1,15 +1,14 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import authRoutes from './routes/auth.js';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
-dotenv.config();
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
+const authRoutes = require('./routes/auth.js');
+const path = require('path');
+const { fileURLToPath } = require('url');
+require('dotenv').config();
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 app.use('/auth', authRoutes);
 app.use(express.static(path.join(__dirname, 'public')));
 

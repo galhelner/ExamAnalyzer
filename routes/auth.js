@@ -1,39 +1,20 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-require('dotenv').config();
-
 const router = express.Router();
+const authController = require('../controllers/authController');
+const requireAuth = require('../auth/requireAuth');
 
-// Register
-router.post('/register', async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const hashed = await bcrypt.hash(password, 10);
-    const user = new User({ email, password: hashed });
-    await user.save();
-    res.status(201).json({ message: 'User registered' });
-  } catch (err) {
-    res.status(400).json({ error: 'User already exists or invalid data' });
-  }
-});
+// Register endpoint
+router.post('/register', authController.register);
 
-// Login
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const user = await User.findOne({ email });
-    if (!user) return res.status(401).json({ error: 'Invalid email or password' });
+// Login endpoint
+router.post('/login', authController.login);
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ error: 'Invalid email or password' });
+// Logout endpoint
+router.post('/logout', authController.logout);
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ message: 'Login successful', token });
-  } catch (err) {
-    res.status(500).json({ error: 'Something went wrong' });
-  }
+// authenticated user check endpoint
+router.get('/me', requireAuth, (req, res) => {
+  res.json({ id: req.user.id, role: req.user.role });
 });
 
 module.exports = router;

@@ -23,7 +23,7 @@
               <form id="registerForm">
                 <div class="row g-3">
                   <div class="col-12">
-                    <label for="regEmail" class="form-label">Email address</label>
+                    <label for="regEmail" class="form-label">Email:</label>
                     <input
                       type="email"
                       id="regEmail"
@@ -33,7 +33,7 @@
                   </div>
 
                   <div class="col-12">
-                    <label for="regPassword" class="form-label">Password</label>
+                    <label for="regPassword" class="form-label">Password:</label>
                     <input
                       type="password"
                       id="regPassword"
@@ -43,6 +43,15 @@
                     />
                   </div>
 
+                  <div class="col-12 mb-4">
+                    <label for="regRole" class="form-label">Role</label>
+                    <select id="regRole" class="form-select" required>
+                      <option value="" disabled selected>Select your role</option>
+                      <option value="student">Student</option>
+                      <option value="teacher">Teacher</option>
+                    </select>
+                  </div>
+                  
                   <div class="col-12">
                     <button class="btn btn-success w-100">Create Account</button>
                   </div>

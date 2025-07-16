@@ -16,11 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(payload),
+                credentials: 'include', // Include cookies for session management
             });
 
             if (!res.ok) throw new Error(`Status: ${res.status}`);
 
             const data = await res.json();
+            console.log(data);
+
+            // Redirect to home page on successful login
             window.location.href = '/';
         } catch (error) {
             console.error('Error during Login:', error);

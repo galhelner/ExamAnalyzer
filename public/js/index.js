@@ -13,5 +13,5 @@ fetch('/auth/me', {
   })
   .catch(err => {
     console.error('Auth failed:', err);
-    window.location.href = '/login.html'; // redirect if not logged in
+    window.location.href = '/auth.html'; // redirect if not logged in
   });

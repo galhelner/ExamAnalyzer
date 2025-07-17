@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/auth.css">
+    <title>Authentication</title>
+</head>
+
+<body>
+    <div class="container" id="authContainer">
+        <div class="form-box">
+            <h2 id="formTitle">Login</h2>
+            <form id="authForm">
+                <input id="authEmail" type="email" placeholder="Email" required>
+                <input id="authPassword" type="password" placeholder="Password" minlength="6" required>
+                <div id="roleSelector" class="role-selector">
+                    <label for="role">Role:</label>
+                    <select id="role" name="role">
+                        <option value="" disabled selected>Select your role</option>
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                    </select>
+                </div>
+                <button id="submit" type="submit">Login</button>
+                <p><span id="toggleText">Don't have an account? </span><a href="#" id="toggleLink">Register</a></p>
+            </form>
+        </div>
+        <div class="info-box">
+            <img src="images/logo.png" alt="Logo">
+            <h1 id="infoTitle">Welcome!</h1>
+            <p id="infoText">Login to enjoy the power of exam analyzer.</p>
+        </div>
+    </div>
+    <script src="js/auth.js"></script>
+</body>
+
+</html>

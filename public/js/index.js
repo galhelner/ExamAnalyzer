@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
       setNavButtonsText(user.role);
 
       // Handle navigation buttons click events based on user role
-      setNavButtonsText(user.role);
+      handleNavButtonsClick(user.role);
     })
     .catch(err => {
       console.error('Auth failed:', err);
@@ -52,7 +52,8 @@ function handleNavButtonsClick(role) {
   } else {
     // student role
     navButton1.addEventListener('click', () => {
-      // TODO: redirect to start exam page
+      console.log('clicked start exam button');
+      showStartExamPopup();
     });
     navButton2.addEventListener('click', () => {
       // TODO: redirect to my grades page
@@ -78,3 +79,21 @@ document.getElementById('logout').addEventListener('click', async () => {
     alert('Logout failed. Please try again.');
   }
 });
+
+function showStartExamPopup() {
+  const overlay = document.getElementById('ovelay');
+  overlay.classList.remove('hidden');
+
+  const closeButton = document.getElementById('closePopup');
+  closeButton.addEventListener('click', () => {
+    overlay.classList.add('hidden');
+  });
+
+  const startExamButton = document.getElementById('startExamButton');
+  startExamButton.addEventListener('click', () => {
+    const examCode = document.getElementById('examCode').value;
+    if (examCode) {
+      // TODO: check exam code (using server API) and start exam
+    }
+  });
+}

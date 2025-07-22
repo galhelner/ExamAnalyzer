@@ -94,6 +94,8 @@ function showStartExamPopup() {
     const examCode = document.getElementById('examCode').value;
     if (examCode) {
       // TODO: check exam code (using server API) and start exam
+    } else {
+      alert('Please enter exam code');
     }
   });
 }

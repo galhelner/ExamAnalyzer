@@ -7,6 +7,7 @@ const infoText = document.getElementById('infoText');
 const roleSelector = document.getElementById('roleSelector');
 const roleDropdown = document.getElementById('role');
 const submitButton = document.getElementById('submit');
+const authFullName = document.getElementById('authFullName');
 let isLogin = true;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -38,6 +39,8 @@ toggleLink.addEventListener('click', (e) => {
     roleSelector.style.display = 'flex';
     roleDropdown.disabled = false;
     roleDropdown.required = true;
+    authFullName.classList.remove('hidden');
+    authFullName.required = true;
   } else {
     // login mode
     formTitle.textContent = 'Login';
@@ -49,6 +52,8 @@ toggleLink.addEventListener('click', (e) => {
     roleSelector.style.display = 'none';
     roleDropdown.disabled = true;
     roleDropdown.required = false;
+    authFullName.classList.add('hidden');
+    authFullName.required = false;
   }
 });
 
@@ -85,6 +90,7 @@ async function login() {
 // registration submission handler
 async function register() {
     const payload = {
+            fullName: authFullName.value,
             email: authForm.authEmail.value,
             password: authForm.authPassword.value,
             role: authForm.role.value,

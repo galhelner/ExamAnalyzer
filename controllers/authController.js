@@ -5,13 +5,14 @@ require('dotenv').config();
 
 // register functionality
 exports.register = async (req, res) => {
-  const { email, password, role } = req.body;
+  const { fullName, email, password, role } = req.body;
+  console.log('Registering user:', { fullName, email, role });
   try {
     // hash the password
     const hashed = await bcrypt.hash(password, 10);
 
     // create a new user in mongoDB
-    const user = new User({ email, password: hashed, role });
+    const user = new User({ fullName, email, password: hashed, role });
     await user.save();
 
     // create JWT access token

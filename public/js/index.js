@@ -3,7 +3,7 @@ const navButton2 = document.getElementById('navButton2');
 const teacherRole = 'teacher';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Fetch user authentication status (id and role)
+  // Fetch current authenticated user data
   fetch('/auth/me', {
     method: 'GET',
     credentials: 'include'

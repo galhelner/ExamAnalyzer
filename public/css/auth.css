@@ -38,8 +38,8 @@ body {
 }
 
 .info-box {
-  background: #4a90e2;
-  color: white;
+  background: #f3e4dd;
+  color: black;
   z-index: 1;
 }
 
@@ -49,7 +49,7 @@ body {
 
 .container.register .info-box {
   transform: translateX(-100%);
-  background: #6c63ff;
+  background: #f3e4dd;
 }
 
 form {
@@ -98,4 +98,8 @@ select {
     margin-top: 15px;
     width: 100%;
     align-items: center;
+}
+
+.hidden {
+    display: none;
 }

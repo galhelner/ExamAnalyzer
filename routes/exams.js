@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const examsController = require('../controllers/examsController');
+const requireAuth = require('../auth/requireAuth');
 
 // delete exam endpoint
 router.delete('/:id', examsController.deleteExam);
@@ -15,7 +16,7 @@ router.put('/:id', examsController.editExam);
 router.get('/my-exams', examsController.getMyExams);
 
 // create exam endpoint
-router.post('/create-exam', examsController.createExam);
+router.post('/create-exam', requireAuth, examsController.createExam);
 
 // publish exam endpoint
 router.post('/publish-exam', examsController.publishExam);

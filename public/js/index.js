@@ -44,7 +44,7 @@ function setNavButtonsText(role) {
 function handleNavButtonsClick(role) {
   if (role === teacherRole) {
     navButton1.addEventListener('click', () => {
-      // TODO: redirect to create exam page
+      window.location.href = '/create-exam.html';
     });
     navButton2.addEventListener('click', () => {
       // TODO: redirect to view exams analysis page

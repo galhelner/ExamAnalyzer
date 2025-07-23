@@ -8,8 +8,32 @@ exports.getMyExams = async (req, res) => {
 };
 
 exports.createExam = async (req, res) => {
-    // TODO: get the exam data from the request body
-    // TODO: create a new exam in mongoDB
+    // get the exam data from the request body
+    const { examName, questions } = req.body;
+
+    console.log('user', req.user);
+
+    // create a new exam model instance
+    const exam = new Exam({
+        title: examName,
+        questions: questions.map(q => ({
+            description: q.description,
+            options: q.answers
+        })),
+        createdBy: req.user.id,
+        examCode: Math.random().toString(36).substring(2, 15), // Generate a random exam code
+        status: 'private'
+    });
+
+    // save the exam to the database
+    await exam.save()
+        .then(() => {
+            res.status(201).json({ success: true, message: 'Exam created successfully!' });
+        })
+        .catch(err => {
+            console.error('Error creating exam:', err);
+            res.status(500).json({ success: false, message: 'Failed to create exam.' });
+        });
 }
 
 exports.getExamById = async (req, res) => {

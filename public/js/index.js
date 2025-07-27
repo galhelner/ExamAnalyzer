@@ -56,7 +56,10 @@ function handleNavButtonsClick(role) {
       showStartExamPopup();
     });
     navButton2.addEventListener('click', () => {
-      // TODO: redirect to my grades page
+      // TODO: remove it!!!
+      const mockExamID = '6884d3fff8678a5e1942ac75';
+      const mockUserID = '68812ba67cb9df402408bac9'; 
+      window.location.href = `/exam-results.html?examID=${mockExamID}&userID=${mockUserID}`;
     });
   }
 }

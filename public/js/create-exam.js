@@ -71,10 +71,23 @@ function createExam(e) {
     .then(response => response.json())
     .then(result => {
         if (result.success) {
-            alert('Exam created successfully!');
-            window.location.href = '/';
+            Swal.fire({
+                title: 'Success!',
+                text: 'Exam created successfully!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/';
+                }
+            });
         } else {
-            alert(result.message || 'Failed to create exam.');
+            Swal.fire({
+                title: 'Error!',
+                text: result.message || 'Failed to create exam.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         }
     })
     .catch(err => {

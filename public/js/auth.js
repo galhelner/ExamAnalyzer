@@ -83,7 +83,11 @@ async function login() {
             window.location.href = '/';
         } catch (error) {
             console.error('Error during Login:', error);
-            alert('Login failed. Please try again.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Login Failed',
+                text: 'Please check your credentials and try again.',
+            });
         }
 }
 
@@ -115,6 +119,10 @@ async function register() {
             window.location.href = '/';
         } catch (error) {
             console.error('Error during Registration:', error);
-            alert('Registration failed. Please try again.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Registration Failed',
+                text: 'Please check your details and try again.',
+            });
         }
 }

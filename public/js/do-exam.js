@@ -102,8 +102,13 @@ async function submitExam(e, examID, exam) {
         .then(result => {
             if (result.success) {
                 const score = result.data;
-                alert(`Exam submitted successfully! Your score: ${score}`);
-                window.location.href = '/';
+                Swal.fire({
+                    title: 'Exam Submitted',
+                    text: `Your score is ${score}`,
+                    icon: 'success'}
+                ).then(() => {
+                    window.location.href = '/';
+                });
             } else {
                 alert(result.message || 'Submission failed.');
             }

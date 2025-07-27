@@ -28,6 +28,6 @@ router.post('/finish-exam', examsController.finishExam);
 router.post('/validate-exam-code', examsController.validateExamCode);
 
 // submit exam endpoint
-router.post('/submit-exam', examsController.submitExam);
+router.post('/submit-exam', requireAuth, examsController.submitExam);
 
 module.exports = router;

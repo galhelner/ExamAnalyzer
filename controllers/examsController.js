@@ -11,8 +11,6 @@ exports.createExam = async (req, res) => {
     // get the exam data from the request body
     const { examName, questions } = req.body;
 
-    console.log('user', req.user);
-
     // create a new exam model instance
     const exam = new Exam({
         title: examName,
@@ -38,9 +36,12 @@ exports.createExam = async (req, res) => {
 
 exports.getExamById = async (req, res) => {
     const examId = req.params.id;
-    // TODO: find the exam by ID in mongoDB
-    // TODO: analyze the exam data (group by grades)
-    // TODO: return the exam data in the response
+    const exam = await Exam.findById(examId);
+    if (!exam) {
+        return res.status(404).json({ success: false, message: 'Exam not found.' });
+    }
+
+    return res.status(200).json({ success: true, data: exam });
 }
 
 exports.deleteExam = async (req, res) => {
@@ -55,11 +56,46 @@ exports.editExam = async (req, res) => {
 }
 
 exports.submitExam = async (req, res) => {
-    const examId = req.body.examId;
-    const userId = req.user.id;
-    // TODO: find the exam by ID in mongoDB
-    // TODO: calculate the score based on the submitted answers
-    // TODO: update the exam with the user's answers and score
+    const examID = req.body.examID;
+    const userID = req.user.id;
+    const answers = req.body.answers;
+
+    // find the exam by ID in mongoDB
+    const exam = await Exam.findById(examID);
+    if (!exam) {
+        return res.status(404).json({ success: false, message: 'Exam not found.' });
+    }
+
+    // calculate the score based on the submitted answers
+    const score = calculateScore(exam, answers);
+
+    // update the exam with the user's answers and score
+    exam.submittions.push({
+        userId: userID,
+        answers: answers,
+        score: score
+    });
+
+    await exam.save()
+        .then(() => {
+            res.status(200).json({ success: true, message: 'Exam submitted successfully!', data: score });
+        })
+        .catch(err => { 
+            console.error('Error submitting exam:', err);
+            res.status(500).json({ success: false, message: 'Failed to submit exam.' });
+        });
+}
+
+function calculateScore(exam, answers) {
+    let score = 0;
+    const questionsCount = exam.questions.length;
+    const questionScore = 100 / questionsCount; // Assuming each question is worth equal points
+    exam.questions.forEach((question, index) => {
+        if (question.options[answers[index]] === question.options[0]) {
+            score += questionScore; // Assuming the first option is the correct answer
+        }
+    });
+    return score;
 }
 
 exports.validateExamCode = async (req, res) => {

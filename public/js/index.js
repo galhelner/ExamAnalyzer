@@ -93,7 +93,9 @@ function showStartExamPopup() {
   startExamButton.addEventListener('click', () => {
     const examCode = document.getElementById('examCode').value;
     if (examCode) {
-      // TODO: check exam code (using server API) and start exam
+      // TODO: check exam code (using server API), if valid get the exam id and start exam
+      const mockExamID = '6884d3fff8678a5e1942ac75'; // This should be replaced with actual exam ID from server
+      window.location.href = `/do-exam.html?examID=${mockExamID}`;
     } else {
       alert('Please enter exam code');
     }

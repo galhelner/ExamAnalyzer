@@ -1,0 +1,115 @@
+document.addEventListener('DOMContentLoaded', async function () {
+    // get the exam id from query string
+    const urlParams = new URLSearchParams(window.location.search);
+    const examID = urlParams.get('examID');
+
+    // Fetch exam data from server
+    const examData = await fetchExamData(examID);
+
+    if (examData.success === false) {
+        alert('Failed to load exam data: ' + examData.message);
+        return;
+    }
+    
+    const exam = examData.data;
+
+    // Set title
+    document.title = exam.title;
+    document.getElementById('exam-title').textContent = exam.title;
+
+    // Render questions
+    renderQuestions(exam);
+    
+    // Handle form submit
+    document.getElementById('do-exam-form').addEventListener('submit', async (e) => submitExam(e, examID, exam));
+
+    // Handle exit exam button
+    const exitBtn = document.getElementById('exit-exam-btn');
+    if (exitBtn) {
+        exitBtn.addEventListener('click', function () {
+            if (confirm('Are you sure you want to exit the exam? Your answers will not be saved.')) {
+                window.location.href = '/';
+            }
+        });
+    }
+});
+
+async function fetchExamData(examID) {
+    try {
+        const response = await fetch(`/exams/${examID}`);
+        if (!response.ok) {
+            throw new Error('Failed to load exam data.');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching exam data:', error);
+        alert('Failed to load exam data.');
+    }
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+function renderQuestions(exam) {
+    const questionsContainer = document.getElementById('questions-container');
+    questionsContainer.innerHTML = '';
+
+    exam.questions.forEach((q, idx) => {
+        // shuffle options
+        const shuffledOptions = shuffleArray(q.options.slice());
+
+        const block = document.createElement('div');
+        block.className = 'question-block';
+        block.innerHTML = `
+            <span class="question-title">${idx + 1}. ${q.description}</span>
+            <div class="answers">
+                ${shuffledOptions.map((ans, aIdx) => `
+                    <div class="answer-option">
+                        <input type="radio" id="q${idx}_a${aIdx}" name="question_${idx}" value="${ans}" required>
+                        <label for="q${idx}_a${aIdx}">${ans}</label>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        questionsContainer.appendChild(block);
+    });
+}
+
+async function submitExam(e, examID, exam) {
+    e.preventDefault();
+
+    // get submitted answers
+    const answers = [];
+    exam.questions.forEach((q, idx) => {
+        const selected = document.querySelector(`input[name="question_${idx}"]:checked`);
+        const answerIndex = exam.questions[idx].options.indexOf(selected ? selected.value : null);
+        answers.push(answerIndex);
+    });
+
+    // Send answers to server
+    fetch('/exams/submit-exam', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ examID, answers }),
+        credentials: 'include'
+    })
+        .then(res => res.json())
+        .then(result => {
+            if (result.success) {
+                const score = result.data;
+                alert(`Exam submitted successfully! Your score: ${score}`);
+                window.location.href = '/';
+            } else {
+                alert(result.message || 'Submission failed.');
+            }
+        })
+        .catch(err => {
+            alert('Error submitting exam.');
+            console.error(err);
+        });
+}

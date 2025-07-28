@@ -3,8 +3,25 @@ const Exam = require('../models/Exam');
 
 exports.getMyExams = async (req, res) => {
     const userID = req.user.id;
-    // TODO: find all exams for the specific user in mongoDB
-    // TODO: return them in the response based on the user role
+    const userRole = req.user.role;
+    
+    if (userRole === 'teacher') {
+        // find all exams created by the teacher
+        const exams = await Exam.find({ createdBy: userID });
+        if (!exams || exams.length === 0) {
+            return res.status(404).json({ success: false, message: 'No exams found for this teacher.' });
+        }
+        return res.status(200).json({ success: true, data: exams });
+    }
+
+    if (userRole === 'student') {
+        // find all exams that the student has submitted
+        const exams = await Exam.find({ 'submittions.userId': userID });
+        if (!exams || exams.length === 0) {
+            return res.status(404).json({ success: false, message: 'No exams found for this student.' });
+        }
+        return res.status(200).json({ success: true, data: exams });
+    }
 };
 
 exports.createExam = async (req, res) => {
@@ -45,14 +62,29 @@ exports.getExamById = async (req, res) => {
 }
 
 exports.deleteExam = async (req, res) => {
+    // delete the exam by ID in mongoDB
     const examId = req.params.id;
-    // TODO: delete the exam by ID in mongoDB
+    const exam = await Exam.findByIdAndDelete(examId);
+
+    if (!exam) {
+        return res.status(404).json({ success: false, message: 'Exam not found.' });
+    }
+    return res.status(200).json({ success: true, message: 'Exam deleted successfully.' });
 }
 
 exports.editExam = async (req, res) => {
     const examId = req.params.id;
-    // TODO: get the updated exam data from the request body
-    // TODO: update the exam in mongoDB
+    const examData = req.body.examData;
+
+    // find the exam by ID in mongoDB and update it
+    await Exam.replaceOne({ _id: examId }, examData)
+        .then(() => {
+            res.status(200).json({ success: true, message: 'Exam updated successfully!' });
+        })
+        .catch(err => {
+            console.error('Error updating exam:', err);
+            res.status(500).json({ success: false, message: 'Failed to update exam.' });
+        });
 }
 
 exports.submitExam = async (req, res) => {
@@ -99,19 +131,62 @@ function calculateScore(exam, answers) {
 }
 
 exports.validateExamCode = async (req, res) => {
+    // find the exam by exam code
     const examCode = req.body.examCode;
-    // TODO: check if the exam code exists in mongoDB
-    // TODO: return a response indicating whether the code is valid or not
+    const exam = await Exam.findOne({ examCode: examCode });
+
+    // Check if the exam not exists
+    if (!exam) {
+        return res.status(404).json({ success: false, message: 'Invalid exam code.' });
+    }
+
+    // Check if the exam is unavailable
+    if (exam.status === 'private' || exam.status === 'done') {
+        return res.status(400).json({ success: false, message: 'Exam is unavailable.' });
+    }
+
+    // Return the exam ID if the code is valid
+    return res.status(200).json({ success: true, message: 'Valid exam code.', data: exam._id });
 }
 
 exports.publishExam = async (req, res) => {
+    // find the exam by ID in mongoDB
     const examId = req.body.examId;
-    // TODO: find the exam by ID in mongoDB
-    // TODO: update the exam status to 'in_progress'
+    const exam = await Exam.findById(examId);
+
+    if (!exam) {
+        return res.status(404).json({ success: false, message: 'Exam not found.' });
+    }
+
+    // update the exam status to 'in_progress'
+    exam.status = 'in_progress';
+    await exam.save()
+        .then(() => {
+            res.status(200).json({ success: true, message: 'Exam published successfully!' });
+        })
+        .catch(err => { 
+            console.error('Error publishing exam:', err);
+            res.status(500).json({ success: false, message: 'Failed to publish exam.' });
+        });
 }
 
 exports.finishExam = async (req, res) => {
+    // find the exam by ID in mongoDB
     const examId = req.body.examId;
-    // TODO: find the exam by ID in mongoDB
-    // TODO: update the exam status to 'done'
+    const exam = await Exam.findById(examId);
+
+    if (!exam) {
+        return res.status(404).json({ success: false, message: 'Exam not found.' });
+    }
+
+    // update the exam status to 'done'
+    exam.status = 'done';
+    await exam.save()
+        .then(() => {
+            res.status(200).json({ success: true, message: 'Exam finished successfully!' });
+        })
+        .catch(err => { 
+            console.error('Error finishing exam:', err);
+            res.status(500).json({ success: false, message: 'Failed to finish exam.' });
+        });
 }

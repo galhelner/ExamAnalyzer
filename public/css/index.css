@@ -1,5 +1,5 @@
 body {
-    position: fixed;
+    position: static;
     height: 100%;
     width: 100%;
     margin: 0;
@@ -141,4 +141,8 @@ button {
 
 #closePopup:hover {
     color: #ff0000;
+}
+
+.swal2-container {
+    z-index: 10000 !important;
 }

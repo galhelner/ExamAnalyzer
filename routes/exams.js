@@ -6,14 +6,14 @@ const requireAuth = require('../auth/requireAuth');
 // delete exam endpoint
 router.delete('/:id', examsController.deleteExam);
 
-// get exam by ID endpoint
-router.get('/:id', examsController.getExamById);
-
 // edit exam endpoint
 router.put('/:id', examsController.editExam);
 
 // get my exams endpoint
-router.get('/my-exams', examsController.getMyExams);
+router.get('/my-exams', requireAuth, examsController.getMyExams);
+
+// get exam by ID endpoint
+router.get('/:id', examsController.getExamById);
 
 // create exam endpoint
 router.post('/create-exam', requireAuth, examsController.createExam);

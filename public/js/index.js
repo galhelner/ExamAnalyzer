@@ -47,7 +47,6 @@ function handleNavButtonsClick(role) {
       window.location.href = '/create-exam.html';
     });
     navButton2.addEventListener('click', () => {
-      // TODO: redirect to view exams analysis page
     });
   } else {
     // student role
@@ -56,10 +55,6 @@ function handleNavButtonsClick(role) {
       showStartExamPopup();
     });
     navButton2.addEventListener('click', () => {
-      // TODO: remove it!!!
-      const mockExamID = '6884d3fff8678a5e1942ac75';
-      const mockUserID = '68812ba67cb9df402408bac9'; 
-      window.location.href = `/exam-results.html?examID=${mockExamID}&userID=${mockUserID}`;
     });
   }
 }
@@ -93,14 +88,39 @@ function showStartExamPopup() {
   });
 
   const startExamButton = document.getElementById('startExamButton');
-  startExamButton.addEventListener('click', () => {
+  startExamButton.addEventListener('click', async () => {
     const examCode = document.getElementById('examCode').value;
     if (examCode) {
-      // TODO: check exam code (using server API), if valid get the exam id and start exam
-      const mockExamID = '6884d3fff8678a5e1942ac75'; // This should be replaced with actual exam ID from server
-      window.location.href = `/do-exam.html?examID=${mockExamID}`;
+      const response = await fetch('/exams/validate-exam-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ examCode }),
+        credentials: 'include'
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: result.message || 'Failed to validate exam code.'
+        });
+        return;
+      }
+
+      const examID = result.data;
+
+      // redirect to exam page with the exam ID
+      window.location.href = `/do-exam.html?examID=${examID}`;
     } else {
-      alert('Please enter exam code');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Warning',
+        text: 'Please enter an exam code.'
+      });
     }
   });
 }

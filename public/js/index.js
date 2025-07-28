@@ -44,10 +44,9 @@ function setNavButtonsText(role) {
 function handleNavButtonsClick(role) {
   if (role === teacherRole) {
     navButton1.addEventListener('click', () => {
-      // TODO: redirect to create exam page
+      window.location.href = '/create-exam.html';
     });
     navButton2.addEventListener('click', () => {
-      // TODO: redirect to view exams analysis page
     });
   } else {
     // student role
@@ -56,7 +55,6 @@ function handleNavButtonsClick(role) {
       showStartExamPopup();
     });
     navButton2.addEventListener('click', () => {
-      // TODO: redirect to my grades page
     });
   }
 }
@@ -90,12 +88,39 @@ function showStartExamPopup() {
   });
 
   const startExamButton = document.getElementById('startExamButton');
-  startExamButton.addEventListener('click', () => {
+  startExamButton.addEventListener('click', async () => {
     const examCode = document.getElementById('examCode').value;
     if (examCode) {
-      // TODO: check exam code (using server API) and start exam
+      const response = await fetch('/exams/validate-exam-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ examCode }),
+        credentials: 'include'
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: result.message || 'Failed to validate exam code.'
+        });
+        return;
+      }
+
+      const examID = result.data;
+
+      // redirect to exam page with the exam ID
+      window.location.href = `/do-exam.html?examID=${examID}`;
     } else {
-      alert('Please enter exam code');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Warning',
+        text: 'Please enter an exam code.'
+      });
     }
   });
 }

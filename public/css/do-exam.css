@@ -1,0 +1,135 @@
+/* Actions container for buttons */
+.exam-actions {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 18px;
+}
+
+.exit-btn {
+    width: 40%;
+    align-self: center;
+    padding: 12px;
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    box-shadow: 0 1px 4px rgba(231,76,60,0.08);
+    transition: background 0.2s;
+}
+.exit-btn:hover {
+    background: #c0392b;
+    cursor: pointer;
+}
+body {
+    background: linear-gradient(135deg, #f3e4dd 0%, #e9d5c0 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 650px;
+    background: #fff;
+    padding: 32px 28px 24px 28px;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+    margin-top: 32px;
+}
+
+h1 {
+    margin-bottom: 32px;
+    color: #3a2c1a;
+    letter-spacing: 1px;
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+#do-exam-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 22px;
+}
+
+.question-block {
+    background: #f8f4ef;
+    border: 1.5px solid #e2d3c2;
+    border-radius: 10px;
+    padding: 18px 18px 10px 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 4px rgba(166,124,82,0.06);
+    position: relative;
+    transition: box-shadow 0.2s;
+}
+.question-block:hover {
+    box-shadow: 0 2px 12px rgba(166,124,82,0.13);
+}
+
+.question-title {
+    font-weight: 600;
+    color: #5a4633;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    display: block;
+}
+
+.answers {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.answer-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+}
+
+.answer-option input[type="radio"] {
+    accent-color: #a67c52;
+    width: 18px;
+    height: 18px;
+}
+
+.answer-option label {
+    font-size: 1rem;
+    color: #3a2c1a;
+    cursor: pointer;
+}
+
+button[type="submit"] {
+    width: 40%;
+    align-self: center;
+    padding: 12px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    box-shadow: 0 1px 4px rgba(0,123,255,0.08);
+    transition: background 0.2s;
+}
+button[type="submit"]:hover {
+    background: #0056b3;
+    cursor: pointer;
+}
+
+@media (max-width: 700px) {
+    .form-container {
+        max-width: 98vw;
+        padding: 12px 4vw 12px 4vw;
+    }
+    h1 {
+        font-size: 1.3rem;
+    }
+}

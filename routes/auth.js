@@ -14,7 +14,7 @@ router.post('/logout', authController.logout);
 
 // authenticated user check endpoint
 router.get('/me', requireAuth, (req, res) => {
-  res.json({ id: req.user.id, role: req.user.role });
+  res.json({ id: req.user.id, role: req.user.role, name: req.user.name });
 });
 
 module.exports = router;

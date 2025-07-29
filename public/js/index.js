@@ -16,6 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(user => {
       const userRole = user.role;
+      const userName = user.name;
+
+      // set user name in the drop-down menu
+      document.getElementById('userName').innerText = userName;
 
       if (userRole === teacherRole) {
         createExamButton.classList.remove('hidden');
@@ -24,6 +28,28 @@ document.addEventListener('DOMContentLoaded', () => {
         startExamButton.classList.remove('hidden');
         startExamButton.addEventListener('click', showStartExamPopup);
       }
+
+
+      // remove it!!!!
+      const grid = document.getElementById('examsGrid');
+
+      function createCard(title, content) {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.innerHTML = `
+          <h3>${title}</h3>
+          <p>${content}</p>
+        `;
+        return card;
+      }
+
+      // Example: Inject 5 cards
+      for (let i = 1; i <= 30; i++) {
+        const card = createCard(`Card ${i}`, `This is card number ${i}.`);
+        grid.appendChild(card);
+      }
+
+
     })
     .catch(err => {
       console.error('Auth failed:', err);

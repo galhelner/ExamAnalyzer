@@ -16,7 +16,7 @@ exports.register = async (req, res) => {
     await user.save();
 
     // create JWT access token
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id, role: user.role, name: user.fullName }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     // set it in an HTTP-only cookie
     res.cookie('access_token', token, { 
@@ -43,7 +43,7 @@ exports.login = async (req, res) => {
     if (!isMatch) return res.status(401).json({ error: 'Invalid email or password' });
 
     // create JWT access token
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id, role: user.role, name: user.fullName }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     // set it in an HTTP-only cookie
     res.cookie('access_token', token, { 

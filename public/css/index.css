@@ -1,9 +1,43 @@
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     position: static;
     height: 100%;
     width: 100%;
     margin: 0;
     background-color: #f3e4dd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.exams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive grid */
+  gap: 1rem; /* Space between grid items */
+  padding: 1rem;
+  margin: 0 auto;
+  width: 60%;
+  max-height: 50%;
+  overflow: auto;
+}
+
+.card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translate(-5px);
+    cursor: pointer;
 }
 
 .overlay {
@@ -139,20 +173,30 @@ body {
   position: fixed;
   top: 8rem;
   right: 3rem;
+  width: 8rem;
+  height: 8rem;
   background-color: white;
   border-radius: 0.5rem;
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  padding: 3rem;
+  padding: 1rem;
   z-index: 1000;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  font-size: small;
+}
+
+.dropdown-menu h2 {
+    text-align: start;
+    margin: 0px;
 }
 
 .dropdown-item {
   background-color: #f3e4dd;
   border: none;
+  border-radius: 5px;
   padding: 0.5rem 1rem;
-  text-align: left;
+  text-align: center;
   font-size: 1rem;
   cursor: pointer;
   color: #333;
@@ -165,6 +209,7 @@ body {
 .logout-button {
     background-color: #dc2626;
     color: white;
+    margin-top: auto;
 }
 
 .logout-button:hover {

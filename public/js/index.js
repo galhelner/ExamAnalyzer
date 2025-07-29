@@ -1,6 +1,8 @@
-const navButton1 = document.getElementById('navButton1');
-const navButton2 = document.getElementById('navButton2');
 const teacherRole = 'teacher';
+const startExamButton = document.getElementById('startExamButton');
+const createExamButton = document.getElementById('createExamButton');
+const userIconBtn = document.getElementById('userIconBtn');
+const userDropdown = document.getElementById('userDropdown');
 
 document.addEventListener('DOMContentLoaded', () => {
   // Fetch current authenticated user data
@@ -13,14 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
       return res.json();
     })
     .then(user => {
-      console.log('User ID:', user.id);
-      console.log('User Role:', user.role);
+      const userRole = user.role;
 
-      // Set buttons text based on user role
-      setNavButtonsText(user.role);
-
-      // Handle navigation buttons click events based on user role
-      handleNavButtonsClick(user.role);
+      if (userRole === teacherRole) {
+        createExamButton.classList.remove('hidden');
+        createExamButton.addEventListener('click', createExam);
+      } else {
+        startExamButton.classList.remove('hidden');
+        startExamButton.addEventListener('click', showStartExamPopup);
+      }
     })
     .catch(err => {
       console.error('Auth failed:', err);
@@ -28,37 +31,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Function to set navigation buttons text based on user role
-function setNavButtonsText(role) {
-  if (role === teacherRole) {
-    navButton1.textContent = 'Create Exam';
-    navButton2.textContent = 'View Exams Analysis';
-  } else {
-    // student role
-    navButton1.textContent = 'Start Exam';
-    navButton2.textContent = 'My Grades';
-  }
-}
+// Toggle dropdown visibility
+userIconBtn.addEventListener('click', () => {
+  userDropdown.classList.toggle('hidden');
+});
 
-// Event listeners for navigation buttons based on user role
-function handleNavButtonsClick(role) {
-  if (role === teacherRole) {
-    navButton1.addEventListener('click', () => {
-      window.location.href = '/create-exam.html';
-    });
-    navButton2.addEventListener('click', () => {
-    });
-  } else {
-    // student role
-    navButton1.addEventListener('click', () => {
-      console.log('clicked start exam button');
-      showStartExamPopup();
-    });
-    navButton2.addEventListener('click', () => {
-    });
+// Close dropdown if clicked outside
+window.addEventListener('click', (e) => {
+  if (!userIconBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+    userDropdown.classList.add('hidden');
   }
-}
-
+});
 
 // logout button click event listener
 document.getElementById('logout').addEventListener('click', async () => {
@@ -78,18 +61,24 @@ document.getElementById('logout').addEventListener('click', async () => {
   }
 });
 
+function createExam() {
+  window.location.href = '/create-exam.html';
+}
+
 function showStartExamPopup() {
+  const examCodeInput = document.getElementById('examCode');
   const overlay = document.getElementById('ovelay');
   overlay.classList.remove('hidden');
 
   const closeButton = document.getElementById('closePopup');
   closeButton.addEventListener('click', () => {
     overlay.classList.add('hidden');
+    examCodeInput.value = '';
   });
 
-  const startExamButton = document.getElementById('startExamButton');
-  startExamButton.addEventListener('click', async () => {
-    const examCode = document.getElementById('examCode').value;
+  const startButton = document.getElementById('startButton');
+  startButton.addEventListener('click', async () => {
+    const examCode = examCodeInput.value;
     if (examCode) {
       const response = await fetch('/exams/validate-exam-code', {
         method: 'POST',

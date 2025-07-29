@@ -3,70 +3,7 @@ body {
     height: 100%;
     width: 100%;
     margin: 0;
-    background-color: #f3f4f6;
-}
-
-nav {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: stretch;
-    height: 50px;
-    background-color: #2563eb;
-    color: white;
-    padding: 0.2rem;
-}
-
-.nav-branding {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.logo {
-    width: 50px;
-    height: 50px;
-    object-fit: contain;
-}
-
-.brand-name {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-right: 4rem;
-    margin-left: 1rem;
-}
-
-.nav-buttons {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-button {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    background-color: #1e40af;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-}
-
-.nav-buttons button:hover {
-    background-color: #4b64f3;
-}
-
-.logout-button {
-    background-color: #dc2626;
-}
-
-.logout-button:hover {
-    background-color: #e63939;
+    background-color: #f3e4dd;
 }
 
 .overlay {
@@ -87,7 +24,7 @@ button {
     position: relative;
     flex-direction: column;
     align-items: center;
-    background-color: white;
+    background-color: #f3e4dd;
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 15%;
@@ -103,24 +40,18 @@ button {
     margin-bottom: 1rem;
 }
 
-.exam-icon {
-    width: 100px;
-    height: 100px;
-    object-fit: contain;
-}
-
-.start-exam-button {
-    background-color: #2563eb;
-    color: white;
+.start-button {
+    background-color: #f7d2c1;
+    border-width: 1px;
+    border-color: #ffb491;
     font-size: large;
-    border-radius: 0.5rem;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
+    padding: 0.5rem;
+    width: 50%;
 }
 
-.hidden {
-    display: none;
+.start-button:hover {
+    background-color: #f7bba0;
+    cursor: pointer;
 }
 
 .close-button {
@@ -146,3 +77,101 @@ button {
 .swal2-container {
     z-index: 10000 !important;
 }
+
+.create-exam-buttton {
+    position: fixed;
+    right: 3rem;
+    bottom: 3rem;
+    width: 70px;
+    height: 70px;
+    border-radius: 30px;
+    font-size: xx-large;
+    background-color: #f7d2c1;
+    border-width: 1px;
+    border-color: #ffb491;
+}
+
+.create-exam-buttton:hover {
+    background-color: #f7bba0;
+    cursor: pointer;
+}
+
+.start-exam-button {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 70px;
+    width: 150px;
+    font-size: large;
+    background-color: #f7d2c1;
+    border-width: 1px;
+    border-color: #ffb491;
+}
+
+.start-exam-button:hover {
+    background-color: #f7bba0;
+    cursor: pointer;
+}
+
+.user-icon-button {
+  position: fixed;
+  top: 3rem;
+  right: 3rem;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: none;
+  background-color: #f7d2c1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.user-icon-button:hover {
+  background-color: #f7bba0;
+}
+
+.dropdown-menu {
+  position: fixed;
+  top: 8rem;
+  right: 3rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  padding: 3rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-item {
+  background-color: #f3e4dd;
+  border: none;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.dropdown-item:hover {
+  background-color: #f7d2c1;
+}
+
+.logout-button {
+    background-color: #dc2626;
+    color: white;
+}
+
+.logout-button:hover {
+    background-color: #e63939;
+}
+
+.hidden {
+  display: none;
+}
+

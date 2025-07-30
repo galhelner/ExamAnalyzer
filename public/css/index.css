@@ -11,32 +11,66 @@ body {
     margin: 0;
     background-color: #f3e4dd;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
+h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 3rem;
+}
+
 .exams-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive grid */
-  gap: 1rem; /* Space between grid items */
-  padding: 1rem;
-  margin: 0 auto;
-  width: 60%;
-  max-height: 50%;
-  overflow: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    /* Responsive grid */
+    gap: 1rem;
+    /* Space between grid items */
+    padding: 1rem;
+    margin: 0 auto;
+    width: 60%;
+    max-height: 50%;
+    overflow: auto;
+}
+
+.exams-grid::-webkit-scrollbar {
+    width: 7px;
+}
+
+.exams-grid::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+.exams-grid::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa;
 }
 
 .card {
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f7d2c1;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.card p {
+    margin: 0.5rem 0;
+    font-size: medium;
+    color: #333;
 }
 
 .card:hover {
-    transform: translate(-5px);
+    filter: brightness(1.05);
+    background-color: #f7bba0;
     cursor: pointer;
 }
 

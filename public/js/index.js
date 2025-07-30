@@ -33,23 +33,72 @@ document.addEventListener('DOMContentLoaded', () => {
       // remove it!!!!
       const grid = document.getElementById('examsGrid');
 
-      function createCard(title, content) {
+      function createStatusElement(status) {
+        const statusElement = document.createElement('div');
+        statusElement.title = status;
+        statusElement.style.width = '20px';
+        statusElement.style.height = '20px';
+        statusElement.style.borderRadius = '50%';
+        statusElement.style.marginTop = '10px';
+
+        if (status === 'private') {
+          statusElement.style.backgroundColor = 'red';
+        } else if (status === 'in_progress') {
+          statusElement.style.backgroundColor = 'yellow';
+        } else if (status === 'done') {
+          statusElement.style.backgroundColor = 'green';
+        }
+
+        return statusElement;
+      }
+
+      function createGradeElement(grade) {
+        const gradeElement = document.createElement('div');
+        gradeElement.style.width = '50px';
+        gradeElement.style.height = '20px';
+        gradeElement.style.borderRadius = '5px';
+        gradeElement.style.marginTop = '10px';
+        gradeElement.style.textAlign = 'center';
+        gradeElement.style.color = 'white';
+        gradeElement.style.fontWeight = 'bold';
+        gradeElement.innerText = grade;
+
+        if (grade > 55) {
+          gradeElement.style.backgroundColor = 'green';
+        } else {
+          gradeElement.style.backgroundColor = 'red';
+        }
+
+        return gradeElement;
+      }
+
+      function createCard(title, date, time, status, grade) {
         const card = document.createElement('div');
         card.classList.add('card');
         card.innerHTML = `
           <h3>${title}</h3>
-          <p>${content}</p>
+          <p>${date}</p>
+          <p>${time}</p>
         `;
+        if (userRole === teacherRole) {
+          card.appendChild(createStatusElement(status));
+        } else {
+          card.appendChild(createGradeElement(grade));
+        }
         return card;
       }
 
       // Example: Inject 5 cards
-      for (let i = 1; i <= 30; i++) {
-        const card = createCard(`Card ${i}`, `This is card number ${i}.`);
-        grid.appendChild(card);
-      }
-
-
+      const exam1 = createCard('Math Exam', '2023-10-01', '10:00 AM', 'private', '85');
+      const exam2 = createCard('Science Exam', '2023-10-02', '11:00 AM', 'in_progress', '60');
+      const exam3 = createCard('History Exam', '2023-10-03', '12:00 PM', 'done', '75');
+      const exam4 = createCard('English Exam', '2023-10-04', '1:00 PM', 'private', '45');
+      const exam5 = createCard('Geography Exam', '2023-10-05', '2:00 PM', 'in_progress', '90');
+      grid.appendChild(exam1);
+      grid.appendChild(exam2);
+      grid.appendChild(exam3);
+      grid.appendChild(exam4);
+      grid.appendChild(exam5);
     })
     .catch(err => {
       console.error('Auth failed:', err);

@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById('exam-title').textContent = exam.title;
 
     // set score with indicator
-    const score = exam.submittions.find(sub => sub.userId.toString() === userID)?.score || 0;
+    const submission = exam.submittions.find(sub => sub.userId.toString() === userID);
+    const score = submission ? submission.score : 0;
     const scoreBlock = document.getElementById('score-block');
     let indicator = '';
     if (score < 56) {

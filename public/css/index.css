@@ -1,3 +1,14 @@
+/* Container for grid and floating button to control layout */
+.exams-section {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    /* No extra bottom padding needed, button is outside */
+}
 html {
     height: 100%;
     margin: 0;
@@ -19,21 +30,20 @@ body {
 h1 {
     font-size: 2rem;
     color: #333;
-    margin-bottom: 3rem;
+    margin: 2rem 0 2rem 0;
 }
 
 .exams-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    /* Responsive grid */
     gap: 1rem;
-    /* Space between grid items */
     padding: 1rem;
-    margin: 0 auto;
-    width: 60%;
-    max-height: 50%;
-    overflow: auto;
+    margin: 0 auto 3.5rem auto;
+    width: 70%;
+    max-height: calc(100vh - 10rem); /* Leave space for button at bottom */
+    overflow-y: auto;
+    background: transparent;
 }
 
 .exams-grid::-webkit-scrollbar {
@@ -165,16 +175,20 @@ h1 {
 }
 
 .start-exam-button {
-    position: absolute;
-    bottom: 3rem;
-    left: 50%;
-    transform: translateX(-50%);
+    display: block;
+    margin: 1rem auto 1rem auto;
     height: 70px;
     width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+    box-sizing: border-box;
     font-size: large;
     background-color: #f7d2c1;
     border-width: 1px;
     border-color: #ffb491;
+    z-index: 1;
+    flex-shrink: 0;
+    grid-column: 1 / -1;
 }
 
 .start-exam-button:hover {

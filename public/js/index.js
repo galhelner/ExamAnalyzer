@@ -31,18 +31,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     startExamButton.addEventListener('click', showStartExamPopup);
   }
 
-  // mock exam data - replace with real data from the server
-  const mockExam1 = { title: 'Math Exam', date: '2023-10-01', time: '10:00 AM', status: 'private', grade: '85' };
-  const mockExam2 = { title: 'Science Exam', date: '2023-10-02', time: '11:00 AM', status: 'in_progress', grade: '60' };
-  const mockExam3 = { title: 'History Exam', date: '2023-10-03', time: '12:00 PM', status: 'done', grade: '75' };
-  const mockExam4 = { title: 'English Exam', date: '2023-10-04', time: '1:00 PM', status: 'private', grade: '45' };
-  const mockExam5 = { title: 'Geography Exam', date: '2023-10-05', time: '2:00 PM', status: 'in_progress', grade: '90' };
-  const mockExams = [mockExam1, mockExam2, mockExam3, mockExam4, mockExam5,
-     mockExam1, mockExam2, mockExam3, mockExam4, mockExam5,
-     mockExam1, mockExam2, mockExam3, mockExam4, mockExam5];
+  // fetch exams for the user
+  try {
+    const examsResponse = await fetch('/exams/my-exams', {
+      method: 'GET',
+      credentials: 'include'
+    });
+    if (!examsResponse.ok) throw new Error('Failed to fetch exams');
+    const examsData = await examsResponse.json();
 
-  // Render exams on the page - replace with real data from the server
-  renderExams(mockExams);
+    // Render exams on the page
+    renderExams(examsData.data);
+  } catch (error) {
+    console.error('Error fetching exams:', error);
+    // Optionally show an error message to the user
+  }
 });
 
 // Render exams on the page

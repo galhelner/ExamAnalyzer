@@ -9,7 +9,7 @@ const examSchema = new mongoose.Schema({
         }
     ],
     createdAt: { type: Date, default: Date.now },
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
     examCode: { type: String, required: true, unique: true },
     status: { type: String, enum: ['done', 'in_progress', 'private'], default: 'private' },
     submittions: [
@@ -21,5 +21,8 @@ const examSchema = new mongoose.Schema({
         }
     ]
 });
+
+// Add an index to the userId within the submittions array for faster lookups for students.
+examSchema.index({ 'submittions.userId': 1 });
 
 module.exports = mongoose.model('Exam', examSchema);

@@ -1,26 +1,60 @@
 const User = require('../models/User');
 const Exam = require('../models/Exam');
 
+/* return basic exam data for the frontend.
+    this includes the exam title, status(for teachers), date, time, grade(students).
+    for teachers: return the status and the date time of creation.
+    for students: return the grade and the date time of submission.
+*/
 exports.getMyExams = async (req, res) => {
-    const userID = req.user.id;
-    const userRole = req.user.role;
-    
-    if (userRole === 'teacher') {
-        // find all exams created by the teacher
-        const exams = await Exam.find({ createdBy: userID });
-        if (!exams || exams.length === 0) {
-            return res.status(404).json({ success: false, message: 'No exams found for this teacher.' });
-        }
-        return res.status(200).json({ success: true, data: exams });
-    }
+    try {
+        const userID = req.user.id;
+        const userRole = req.user.role;
 
-    if (userRole === 'student') {
-        // find all exams that the student has submitted
-        const exams = await Exam.find({ 'submittions.userId': userID });
-        if (!exams || exams.length === 0) {
-            return res.status(404).json({ success: false, message: 'No exams found for this student.' });
+        if (userRole === 'teacher') {
+            // Find all exams created by the teacher, but only select the fields we need.
+            // .lean() returns plain JS objects, which is faster.
+            const exams = await Exam.find({ createdBy: userID })
+                .select('title createdAt status')
+                .lean();
+
+            // Map the data to the format the frontend expects.
+            const formattedExams = exams.map(exam => ({
+                id: exam._id,
+                title: exam.title,
+                status: exam.status,
+                date: new Date(exam.createdAt).toLocaleDateString(),
+                time: new Date(exam.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            }));
+
+            return res.status(200).json({ success: true, data: formattedExams });
         }
-        return res.status(200).json({ success: true, data: exams });
+
+        if (userRole === 'student') {
+            // Find exams where the student has a submission.
+            // The projection {'submittions.$': 1} efficiently returns only the matching submission.
+            const exams = await Exam.find(
+                { 'submittions.userId': userID },
+                { title: 1, 'submittions.$': 1 }
+            ).lean();
+
+            // Map the data to the format the frontend expects.
+            const formattedExams = exams.map(exam => {
+                const submission = exam.submittions[0]; // The '$' operator returns only one
+                return {
+                    id: exam._id,
+                    title: exam.title,
+                    grade: submission.score,
+                    date: new Date(submission.submittedAt).toLocaleDateString(),
+                    time: new Date(submission.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                };
+            });
+
+            return res.status(200).json({ success: true, data: formattedExams });
+        }
+    } catch (error) {
+        console.error('Error fetching my exams:', error);
+        res.status(500).json({ success: false, message: 'Server error while fetching exams.' });
     }
 };
 

@@ -11,7 +11,10 @@
     <h1>Create Exam</h1>
     <div class="form-container">
         <form id="create-exam-form">
-            <input type="text" id="exam-name" placeholder="Exam Name" name="exam-name" required>
+            <div>
+                <input type="text" id="exam-name" placeholder="Exam Name" name="exam-name" required>
+                <p id="exam-name-error" class="exam-name-error-message">Exam name is limited for 40 characters!</p>
+            </div>
             <div id="questions-container">
                 <!-- Questions will be added here -->
             </div>

@@ -127,7 +127,7 @@ function calculateScore(exam, answers) {
             score += questionScore; // Assuming the first option is the correct answer
         }
     });
-    return score;
+    return Math.ceil(score);
 }
 
 exports.validateExamCode = async (req, res) => {

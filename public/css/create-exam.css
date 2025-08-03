@@ -36,7 +36,7 @@ h1 {
 /* Exam name input styling */
 #exam-name {
     width: 100%;
-    margin-bottom: 18px;
+    margin-bottom: 2px;
     padding: 12px 14px;
     border: 1.5px solid #d1bfa7;
     border-radius: 6px;
@@ -46,17 +46,40 @@ h1 {
     box-sizing: border-box;
 }
 
-/* Question and answer input styling */
-.question-block input[type="text"] {
+.exam-name-error-message {
+    color: #b94a2c;
+    display: none;
+    margin-bottom: 2px;
+}
+
+/* Style for answer textarea to match input and grow vertically */
+textarea {
     width: 100%;
+    min-height: 2.5em;
+    height: 2.5em;
+    line-height: 1.2em;
+    max-height: 180px;
     padding: 10px 12px;
     border: 1.5px solid #d1bfa7;
     border-radius: 6px;
     font-size: 1.05rem;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
     background: #faf7f3;
     transition: border 0.2s;
     margin-bottom: 8px;
     box-sizing: border-box;
+    resize: none;
+/* Auto-expand textarea (handled by JS) */
+.auto-expand {
+    overflow-y: hidden;
+    max-height: 180px;
+}
+    overflow-y: auto;
+}
+.answers textarea:focus {
+    border-color: #a67c52;
+    outline: none;
+    background: #fff;
 }
 
 input[type="text"]:focus {

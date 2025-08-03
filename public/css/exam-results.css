@@ -1,3 +1,78 @@
+.answer-label {
+    display: block;
+    margin-bottom: 5px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.95em;
+    font-weight: 600;
+    width: fit-content;
+}
+.correct-label {
+    background: #d1f7c4;
+    color: #217a1d;
+    border: 1px solid #b2e6a1;
+}
+.chosen-label {
+    background: #ffe6c7;
+    color: #a67c52;
+    border: 1px solid #ffd6a1;
+}
+
+.answer-row {
+    padding: 0.7em 1em;
+    border-radius: 8px;
+    background: #f8f4ef;
+    border: 1px solid #e2d3c2;
+    margin-bottom: 0.6em;
+    box-shadow: 0 1px 4px rgba(166,124,82,0.06);
+    transition: box-shadow 0.2s;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+}
+
+.answer-row:last-child {
+    margin-bottom: 0;
+}
+
+.answer-row span {
+    display: inline;
+    word-break: break-word;
+    white-space: pre-line;
+    min-width: 0;
+    padding: 2px 4px;
+    border-radius: 4px;
+    background: #f8f4ef;
+    color: #3a2c1a;
+    font-size: 1rem;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.question-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+.question-title {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 70%;
+    word-break: break-word;
+    white-space: pre-line;
+    display: block;
+}
+.question-points {
+    flex-shrink: 0;
+    max-width: 28%;
+    text-align: right;
+    word-break: break-word;
+    white-space: pre-line;
+    display: block;
+}
 .score-indicator {
     font-size: 2rem;
     vertical-align: middle;
@@ -29,16 +104,10 @@
     flex-direction: column;
     gap: 6px;
 }
-.answer-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 0;
-}
 .answer-row span {
-    display: inline-block;
-    min-width: 120px;
-    padding: 2px 8px;
+    display: inline;
+    min-width: 0;
+    padding: 2px 4px;
     border-radius: 4px;
     background: #f8f4ef;
     color: #3a2c1a;
@@ -135,8 +204,9 @@ h1 {
 
 .answer-row {
     display: flex;
-    gap: 12px;
-    align-items: center;
+    flex-direction: column;
+    row-gap: 2px;
+    align-items: flex-start;
     margin-bottom: 8px;
 }
 

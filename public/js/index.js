@@ -8,7 +8,6 @@ const grid = document.getElementById('examsGrid');
 /*
 * TODOS:
 * 1. Fetch real exam data from the server and render it in the grid.
-* 2. Change the mock examID in createCard function to use real exam IDs.
 */
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -115,11 +114,10 @@ function createCard(exam) {
 
   // Add click event to redirect to exam details page
   card.addEventListener('click', () => {
-    const mockExamID = '688eff0d93097a2a278c3b5b'; // Replace with real exam ID
     if (userRole === teacherRole) {
-      window.location.href = `/exam-analysis.html?examID=${mockExamID}`;
+      window.location.href = `/exam-analysis.html?examID=${exam.id}`;
     } else {
-      window.location.href = `/exam-results.html?examID=${mockExamID}&userID=${userID}`;
+      window.location.href = `/exam-results.html?examID=${exam.id}&userID=${userID}`;
     }
   });
 

@@ -36,7 +36,7 @@ exports.createExam = async (req, res) => {
             options: q.answers
         })),
         createdBy: req.user.id,
-        examCode: Math.random().toString(36).substring(2, 15), // Generate a random exam code
+        examCode: Math.floor(100000 + Math.random() * 900000), // Generate a random exam code
         status: 'private'
     });
 

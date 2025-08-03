@@ -115,7 +115,7 @@ function createCard(exam) {
 
   // Add click event to redirect to exam details page
   card.addEventListener('click', () => {
-    const mockExamID = '688e309f7fc19141959257f9'; // Replace with real exam ID
+    const mockExamID = '688eff0d93097a2a278c3b5b'; // Replace with real exam ID
     if (userRole === teacherRole) {
       window.location.href = `/exam-analysis.html?examID=${mockExamID}`;
     } else {
@@ -179,12 +179,34 @@ document.getElementById('logout').addEventListener('click', async () => {
   }
 });
 
+// redirect to create exam page
 function createExam() {
   window.location.href = '/create-exam.html';
 }
 
+function getCodeValue(inputs) {
+  const code = Array.from(inputs).map(input => input.value).join('');
+  return code;
+}
+
+// Show the start exam popup
 function showStartExamPopup() {
-  const examCodeInput = document.getElementById('examCode');
+  const inputs = document.querySelectorAll('.code-input');
+  
+  inputs.forEach((input, index) => {
+    input.addEventListener("input", () => {
+      if (input.value.length === 1 && index < inputs.length - 1) {
+        inputs[index + 1].focus();
+      }
+    });
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Backspace" && input.value === "" && index > 0) {
+        inputs[index - 1].focus();
+      }
+    });
+  });
+
   const overlay = document.getElementById('ovelay');
   overlay.classList.remove('hidden');
 
@@ -196,7 +218,7 @@ function showStartExamPopup() {
 
   const startButton = document.getElementById('startButton');
   startButton.addEventListener('click', async () => {
-    const examCode = examCodeInput.value;
+    const examCode = getCodeValue(inputs);
     if (examCode) {
       const response = await fetch('/exams/validate-exam-code', {
         method: 'POST',

@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     } else {
         indicator = '<span class="score-indicator pass">&#10004;</span>'; // green V
     }
-    scoreBlock.innerHTML = `<span class="score-label">Score: ${score}</span>${indicator}`;
+    scoreBlock.innerHTML = `<span class="score-label">Score: ${score.toFixed(2)}</span>${indicator}`;
 
     // Render question results
     renderQuestions(exam, userID);

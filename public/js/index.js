@@ -5,11 +5,6 @@ const userIconBtn = document.getElementById('userIconBtn');
 const userDropdown = document.getElementById('userDropdown');
 const grid = document.getElementById('examsGrid');
 
-/*
-* TODOS:
-* 1. Fetch real exam data from the server and render it in the grid.
-*/
-
 document.addEventListener('DOMContentLoaded', async () => {
   // Fetch current authenticated user data
   const { name: userName, id: userID, role: userRole } = await fetchAuthenticatedUser();
@@ -66,7 +61,7 @@ function createGradeElement(grade) {
   gradeElement.style.textAlign = 'center';
   gradeElement.style.color = 'white';
   gradeElement.style.fontWeight = 'bold';
-  gradeElement.innerText = grade;
+  gradeElement.innerText = grade.toFixed(2);
 
   if (grade > 55) {
     gradeElement.style.backgroundColor = 'green';
@@ -104,10 +99,14 @@ function createCard(exam) {
   const { title, date, time, status, grade } = exam;
   const card = document.createElement('div');
   card.classList.add('card');
+
+  const dateLabel = userRole === teacherRole ? 'Created at' : 'Submitted at';
+
   card.innerHTML = `
-          <h3>${title}</h3>
-          <p>${date}</p>
-          <p>${time}</p>
+          <h3 class="card-title">${title}</h3>
+          <p class="card-date-info">${dateLabel}</p>
+          <p class="card-date-info">${date}</p>
+          <p class="card-date-info">${time}</p>
         `;
   if (userRole === teacherRole) {
     card.appendChild(createStatusElement(status));

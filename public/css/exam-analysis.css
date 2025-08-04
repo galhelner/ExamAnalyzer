@@ -108,6 +108,89 @@ h1 {
     cursor: pointer;
 }
 
+#action-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn {
+    width: 60%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    color: #fff;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+}
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+.publish-btn {
+    background-color: #2ecc71;
+}
+.publish-btn:hover {
+    background-color: #27ae60;
+}
+
+.in-progress-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.code-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+}
+
+.exam-code-input {
+    padding: 10px;
+    font-size: 1.2em;
+    text-align: center;
+    border: 1.5px solid #e2d3c2;
+    border-radius: 6px;
+    background: #f8f4ef;
+    color: #3a2c1a;
+    flex-grow: 1;
+    margin-right: -1px;
+}
+
+.copy-btn {
+    padding: 8px;
+    border: 1.5px solid #e2d3c2;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 0 6px 6px 0;
+}
+
+.copy-btn img {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+}
+
+.end-exam-btn {
+    background-color: #f39c12;
+    width: 60%;
+}
+.end-exam-btn:hover {
+    background-color: #e67e22;
+}
+
 @media (max-width: 700px) {
     .results-container {
         max-width: 98vw;

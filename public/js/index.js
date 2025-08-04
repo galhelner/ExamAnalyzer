@@ -5,11 +5,6 @@ const userIconBtn = document.getElementById('userIconBtn');
 const userDropdown = document.getElementById('userDropdown');
 const grid = document.getElementById('examsGrid');
 
-/*
-* TODOS:
-* 1. Fetch real exam data from the server and render it in the grid.
-*/
-
 document.addEventListener('DOMContentLoaded', async () => {
   // Fetch current authenticated user data
   const { name: userName, id: userID, role: userRole } = await fetchAuthenticatedUser();
@@ -31,18 +26,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     startExamButton.addEventListener('click', showStartExamPopup);
   }
 
-  // mock exam data - replace with real data from the server
-  const mockExam1 = { title: 'Math Exam', date: '2023-10-01', time: '10:00 AM', status: 'private', grade: '85' };
-  const mockExam2 = { title: 'Science Exam', date: '2023-10-02', time: '11:00 AM', status: 'in_progress', grade: '60' };
-  const mockExam3 = { title: 'History Exam', date: '2023-10-03', time: '12:00 PM', status: 'done', grade: '75' };
-  const mockExam4 = { title: 'English Exam', date: '2023-10-04', time: '1:00 PM', status: 'private', grade: '45' };
-  const mockExam5 = { title: 'Geography Exam', date: '2023-10-05', time: '2:00 PM', status: 'in_progress', grade: '90' };
-  const mockExams = [mockExam1, mockExam2, mockExam3, mockExam4, mockExam5,
-     mockExam1, mockExam2, mockExam3, mockExam4, mockExam5,
-     mockExam1, mockExam2, mockExam3, mockExam4, mockExam5];
+  // fetch exams for the user
+  try {
+    const examsResponse = await fetch('/exams/my-exams', {
+      method: 'GET',
+      credentials: 'include'
+    });
+    if (!examsResponse.ok) throw new Error('Failed to fetch exams');
+    const examsData = await examsResponse.json();
 
-  // Render exams on the page - replace with real data from the server
-  renderExams(mockExams);
+    // Render exams on the page
+    renderExams(examsData.data);
+  } catch (error) {
+    console.error('Error fetching exams:', error);
+    // Optionally show an error message to the user
+  }
 });
 
 // Render exams on the page
@@ -63,7 +61,7 @@ function createGradeElement(grade) {
   gradeElement.style.textAlign = 'center';
   gradeElement.style.color = 'white';
   gradeElement.style.fontWeight = 'bold';
-  gradeElement.innerText = grade;
+  gradeElement.innerText = grade.toFixed(2);
 
   if (grade > 55) {
     gradeElement.style.backgroundColor = 'green';
@@ -101,10 +99,14 @@ function createCard(exam) {
   const { title, date, time, status, grade } = exam;
   const card = document.createElement('div');
   card.classList.add('card');
+
+  const dateLabel = userRole === teacherRole ? 'Created at' : 'Submitted at';
+
   card.innerHTML = `
-          <h3>${title}</h3>
-          <p>${date}</p>
-          <p>${time}</p>
+          <h3 class="card-title">${title}</h3>
+          <p class="card-date-info">${dateLabel}</p>
+          <p class="card-date-info">${date}</p>
+          <p class="card-date-info">${time}</p>
         `;
   if (userRole === teacherRole) {
     card.appendChild(createStatusElement(status));

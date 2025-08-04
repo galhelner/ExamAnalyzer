@@ -91,7 +91,7 @@ function renderQuestions(exam) {
             <span class="question-title">${idx + 1}. ${q.description}</span>
             <div class="answers">
                 ${shuffledOptions.map((ans, aIdx) => `
-                    <div class="answer-option">
+                    <div class="answer-option" onclick="this.querySelector('input[type=radio]').checked = true;">
                         <input type="radio" id="q${idx}_a${aIdx}" name="question_${idx}" value="${ans}" required>
                         <label for="q${idx}_a${aIdx}">${ans}</label>
                     </div>

@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById('exam-title').textContent = exam.title;
 
     // set score with indicator
-    const submission = exam.submittions.find(sub => sub.userId.toString() === userID);
+    console.log('Exam data:', exam);
+    const submission = exam.submittions.find(sub => sub.userId._id.toString() === userID);
     const score = submission ? Math.ceil(submission.score) : 0;
     const scoreBlock = document.getElementById('score-block');
     let indicator = '';

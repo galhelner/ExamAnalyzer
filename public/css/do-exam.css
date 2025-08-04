@@ -49,12 +49,12 @@ body {
 }
 
 h1 {
-    margin-bottom: 32px;
     color: #3a2c1a;
     letter-spacing: 1px;
     font-size: 2.2rem;
     font-weight: 700;
     text-align: center;
+    margin: 0;
 }
 
 #do-exam-form {
@@ -160,6 +160,13 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background: #0056b3;
     cursor: pointer;
+}
+
+.exam-teacher-text {
+    font-size: 1.3rem;
+    color: #5a4633;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 @media (max-width: 700px) {

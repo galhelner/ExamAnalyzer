@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Set title
     document.title = exam.title;
     document.getElementById('exam-title').textContent = exam.title;
+    document.getElementById('exam-teacher').textContent = `Teacher: ${exam.createdBy.fullName}`;
 
     // Render questions
     renderQuestions(exam);

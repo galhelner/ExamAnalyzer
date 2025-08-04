@@ -1,3 +1,106 @@
+.popup-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.private-btn-container {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    justify-content: center;
+    width: 100%;
+}
+
+.private-btn-container .btn {
+    width: 250px;
+    height: 40px;
+    padding: 0 15px;
+    font-size: 15px;
+    box-sizing: border-box;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.same-size-btn {
+    width: 250px !important; 
+    height: 40px !important; 
+    padding: 0 15px;
+    font-size: 15px;
+    box-sizing: border-box;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Table Styles */
+.student-scores-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    table-layout: fixed; 
+    box-sizing: border-box; 
+}
+
+/* Wrapper styles to ensure proper table sizing */
+.popup-table-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Groups table specific styles */
+.groups-table {
+    width: 100%;
+}
+
+.groups-table th,
+.groups-table td {
+    width: 25%; /* Equal width for all columns */
+    box-sizing: border-box;
+}
+
+/* Grades table specific styles */
+.grades-table th:nth-child(1),
+.grades-table td:nth-child(1) {
+    width: 30%; /* Medium size for Full Name */
+    box-sizing: border-box;
+}
+
+.grades-table th:nth-child(2),
+.grades-table td:nth-child(2) {
+    width: 50%; /* Largest size for Email */
+    box-sizing: border-box;
+}
+
+.grades-table th:nth-child(3),
+.grades-table td:nth-child(3) {
+    width: 20%; /* Smallest size for Score */
+    box-sizing: border-box;
+}
+
+.student-scores-table th,
+.student-scores-table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .answered-count {
     color: #a67c52;
     background: #f3e4dd;
@@ -16,6 +119,10 @@ body {
     flex-direction: column;
     align-items: center;
     font-family: 'Segoe UI', 'Arial', sans-serif;
+}
+
+body.popup-open {
+    overflow: hidden !important;
 }
 
 .results-container {
@@ -202,7 +309,104 @@ h1 {
     background: #f8f4ef;
     border-radius: 12px;
     box-shadow: 0 2px 12px rgba(166,124,82,0.09);
+    overflow-y: auto;
+    max-height: 300px;
+    display: block;
+}
+/* Popup styles */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+.popup-close-btn {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 2;
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+.popup-close-btn svg {
+    display: block;
+    width: 28px;
+    height: 28px;
+    transition: box-shadow 0.2s;
+}
+.popup-close-btn:hover svg circle {
+    filter: brightness(0.85);
+    box-shadow: 0 0 8px #e74c3c44;
+}
+.popup-table {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    padding: 32px 28px 24px 28px;
+    min-width: 340px;
+    max-width: 95vw;
+    max-height: 80vh;
     overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.popup-table-wrapper {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+.popup-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 18px;
+    justify-content: center;
+    align-items: center;
+    margin: 18px 0 0 0;
+    width: 100%;
+}
+@media (max-width: 600px) {
+    .popup-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+.popup-btn {
+    background: linear-gradient(90deg, #f3e4dd 0%, #e9d5c0 100%);
+    color: #5a4633;
+    font-weight: 700;
+    font-size: 1.15rem;
+    border: 2px solid #e2d3c2;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(166,124,82,0.07);
+    transition: background 0.2s, color 0.2s;
+    letter-spacing: 1px;
+    padding: 12px 24px;
+    width: 100%;
+    max-width: 260px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.popup-btn:hover {
+    background: #e2d3c2;
+    color: #8d6e4a;
 }
 
 .student-scores-table th, .student-scores-table td {

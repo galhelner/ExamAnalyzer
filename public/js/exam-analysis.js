@@ -25,31 +25,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Remove the table from the page, only show via popup
     const scoresTableContainer = document.getElementById('student-scores-table-container');
     scoresTableContainer.innerHTML = '';
-
-    // Add popup buttons below exam state actions, only if status is not 'private'
-    if (exam.status !== 'private') {
-        const actionButtonsContainer = document.getElementById('action-buttons');
-        const popupButtons = document.createElement('div');
-        popupButtons.className = 'popup-buttons';
-        // Style both buttons to be the same size
-        const showGroupsBtn = document.createElement('button');
-        showGroupsBtn.textContent = 'Show Groups by Grades';
-        showGroupsBtn.className = 'btn popup-btn same-size-btn';
-        const showGradesBtn = document.createElement('button');
-        showGradesBtn.textContent = 'Show Grading';
-        showGradesBtn.className = 'btn popup-btn same-size-btn';
-        popupButtons.appendChild(showGroupsBtn);
-        popupButtons.appendChild(showGradesBtn);
-        // Insert below the action buttons
-        actionButtonsContainer.appendChild(popupButtons);
-
-        showGroupsBtn.onclick = () => {
-            showTablePopup(renderStudentScoresTable(exam, true));
-        };
-        showGradesBtn.onclick = () => {
-            showTablePopup(renderAltStudentTable(exam));
-        };
-    }
 });
 
 async function fetchExamData(examID) {
@@ -209,6 +184,10 @@ function renderInProgressStateActions(exam, container) {
     const codeContainer = document.createElement('div');
     codeContainer.className = 'code-container';
 
+    // Create wrapper for code input and copy button
+    const codeInputWrapper = document.createElement('div');
+    codeInputWrapper.className = 'code-input-wrapper';
+
     const codeInput = document.createElement('input');
     codeInput.type = 'text';
     codeInput.value = exam.examCode;
@@ -224,8 +203,34 @@ function renderInProgressStateActions(exam, container) {
         alert('Exam code copied to clipboard!');
     };
 
-    codeContainer.appendChild(codeInput);
-    codeContainer.appendChild(copyButton);
+    // Add input and copy button to the wrapper
+    codeInputWrapper.appendChild(codeInput);
+    codeInputWrapper.appendChild(copyButton);
+    
+    // Add the wrapper to the container
+    codeContainer.appendChild(codeInputWrapper);
+
+    // Create and add popup buttons for groups and grading
+    const showGroupsBtn = document.createElement('button');
+    showGroupsBtn.textContent = 'Show Groups by Grades';
+    showGroupsBtn.className = 'btn popup-btn same-size-btn';
+    
+    const showGradesBtn = document.createElement('button');
+    showGradesBtn.textContent = 'Show Grading';
+    showGradesBtn.className = 'btn popup-btn same-size-btn';
+    
+    const buttonsDiv = document.createElement('div');
+    buttonsDiv.className = 'popup-buttons';
+    buttonsDiv.appendChild(showGroupsBtn);
+    buttonsDiv.appendChild(showGradesBtn);
+    codeContainer.appendChild(buttonsDiv);
+    
+    showGroupsBtn.onclick = () => {
+        showTablePopup(renderStudentScoresTable(exam, true));
+    };
+    showGradesBtn.onclick = () => {
+        showTablePopup(renderAltStudentTable(exam));
+    };
 
     const endExamButton = document.createElement('button');
     endExamButton.textContent = 'End Exam';
@@ -265,7 +270,10 @@ function renderInProgressStateActions(exam, container) {
         }
     };
 
+    // Add the code container first
     inProgressContainer.appendChild(codeContainer);
+    
+    // Add the end exam button last
     inProgressContainer.appendChild(endExamButton);
     container.appendChild(inProgressContainer);
 }

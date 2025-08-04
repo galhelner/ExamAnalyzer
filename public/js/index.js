@@ -118,7 +118,7 @@ function createCard(exam) {
       window.location.href = `/exam-analysis.html?examID=${exam.id}`;
     } else {
       // remove it
-      const mockExamID = '688eff0d93097a2a278c3b5b';
+      const mockExamID = '689047dc8e73c0cf7b986513';
       window.location.href = `/exam-results.html?examID=${mockExamID}&userID=${userID}`;
     }
   });

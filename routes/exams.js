@@ -25,7 +25,7 @@ router.post('/publish-exam', examsController.publishExam);
 router.post('/finish-exam', examsController.finishExam);
 
 // validate exam code endpoint
-router.post('/validate-exam-code', examsController.validateExamCode);
+router.post('/validate-exam-code', requireAuth, examsController.validateExamCode);
 
 // submit exam endpoint
 router.post('/submit-exam', requireAuth, examsController.submitExam);

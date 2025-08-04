@@ -145,6 +145,13 @@ exports.validateExamCode = async (req, res) => {
         return res.status(400).json({ success: false, message: 'Exam is unavailable.' });
     }
 
+    // Check if the user has already submitted this exam
+    const userID = req.user.id;
+    const alreadySubmitted = exam.submittions.some(submission => submission.userId.toString() === userID);
+    if (alreadySubmitted) {
+        return res.status(400).json({ success: false, message: 'You have already submitted this exam.' });
+    }
+
     // Return the exam ID if the code is valid
     return res.status(200).json({ success: true, message: 'Valid exam code.', data: exam._id });
 }

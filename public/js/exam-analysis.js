@@ -50,10 +50,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             showTablePopup(renderAltStudentTable(exam));
         };
     }
-
-    document.getElementById('exit-analysis-btn').addEventListener('click', function () {
-        window.location.href = '/';
-    });
 });
 
 async function fetchExamData(examID) {

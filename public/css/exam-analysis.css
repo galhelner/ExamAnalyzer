@@ -195,25 +195,6 @@ h1 {
     box-sizing: border-box;
 }
 
-.exit-btn {
-    width: 40%;
-    align-self: center;
-    padding: 12px;
-    background: #e74c3c;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 32px auto 0 auto;
-    box-shadow: 0 1px 4px rgba(231,76,60,0.08);
-    transition: background 0.2s;
-}
-.exit-btn:hover {
-    background: #c0392b;
-    cursor: pointer;
-}
-
 #action-buttons {
     display: flex;
     flex-direction: column;

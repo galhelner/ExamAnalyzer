@@ -87,10 +87,8 @@ function renderExamStateActions(exam) {
             renderPrivateStateActions(exam, actionButtonsContainer);
             break;
         case 'in_progress':
-            renderInProgressStateActions(exam, actionButtonsContainer);
-            break;
         case 'done':
-            // No actions for done state
+            renderInProgressStateActions(exam, actionButtonsContainer);
             break;
     }
 }
@@ -184,31 +182,34 @@ function renderInProgressStateActions(exam, container) {
     const codeContainer = document.createElement('div');
     codeContainer.className = 'code-container';
 
-    // Create wrapper for code input and copy button
-    const codeInputWrapper = document.createElement('div');
-    codeInputWrapper.className = 'code-input-wrapper';
+    // Only show exam code and copy button if exam is in progress
+    if (exam.status === 'in_progress') {
+        // Create wrapper for code input and copy button
+        const codeInputWrapper = document.createElement('div');
+        codeInputWrapper.className = 'code-input-wrapper';
 
-    const codeInput = document.createElement('input');
-    codeInput.type = 'text';
-    codeInput.value = exam.examCode;
-    codeInput.readOnly = true;
-    codeInput.className = 'exam-code-input';
+        const codeInput = document.createElement('input');
+        codeInput.type = 'text';
+        codeInput.value = exam.examCode;
+        codeInput.readOnly = true;
+        codeInput.className = 'exam-code-input';
 
-    const copyButton = document.createElement('button');
-    copyButton.className = 'copy-btn';
-    copyButton.innerHTML = '<img src="images/copy-icon.png" alt="Copy">'; // Placeholder for copy icon
-    copyButton.onclick = () => {
-        codeInput.select();
-        document.execCommand('copy');
-        alert('Exam code copied to clipboard!');
-    };
+        const copyButton = document.createElement('button');
+        copyButton.className = 'copy-btn';
+        copyButton.innerHTML = '<img src="images/copy-icon.png" alt="Copy">'; // Placeholder for copy icon
+        copyButton.onclick = () => {
+            codeInput.select();
+            document.execCommand('copy');
+            alert('Exam code copied to clipboard!');
+        };
 
-    // Add input and copy button to the wrapper
-    codeInputWrapper.appendChild(codeInput);
-    codeInputWrapper.appendChild(copyButton);
-    
-    // Add the wrapper to the container
-    codeContainer.appendChild(codeInputWrapper);
+        // Add input and copy button to the wrapper
+        codeInputWrapper.appendChild(codeInput);
+        codeInputWrapper.appendChild(copyButton);
+        
+        // Add the wrapper to the container
+        codeContainer.appendChild(codeInputWrapper);
+    }
 
     // Create and add popup buttons for groups and grading
     const showGroupsBtn = document.createElement('button');
@@ -232,49 +233,50 @@ function renderInProgressStateActions(exam, container) {
         showTablePopup(renderAltStudentTable(exam));
     };
 
-    const endExamButton = document.createElement('button');
-    endExamButton.textContent = 'End Exam';
-    endExamButton.className = 'btn end-exam-btn';
-    endExamButton.onclick = async () => {
-        Swal.fire({
-            title: 'Ending Exam...',
-            html: '<div class="swal2-loading-spinner"></div>',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            showConfirmButton: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
-        const response = await fetch(`/exams/finish-exam`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ examId: exam._id })
-        });
-        if (response.ok) {
-            Swal.fire({
-                title: 'Ended!',
-                text: 'Ended exam.',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            }).then(() => {
-                location.reload();
-            });
-        } else {
-            Swal.fire({
-                title: 'Error!',
-                text: 'Failed to end exam.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-        }
-    };
-
-    // Add the code container first
+    // Add the code container
     inProgressContainer.appendChild(codeContainer);
     
-    // Add the end exam button last
-    inProgressContainer.appendChild(endExamButton);
+    // Only add end exam button if exam is in progress
+    if (exam.status === 'in_progress') {
+        const endExamButton = document.createElement('button');
+        endExamButton.textContent = 'End Exam';
+        endExamButton.className = 'btn end-exam-btn';
+        endExamButton.onclick = async () => {
+            Swal.fire({
+                title: 'Ending Exam...',
+                html: '<div class="swal2-loading-spinner"></div>',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            const response = await fetch(`/exams/finish-exam`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ examId: exam._id })
+            });
+            if (response.ok) {
+                Swal.fire({
+                    title: 'Ended!',
+                    text: 'Ended exam.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to end exam.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        };
+        inProgressContainer.appendChild(endExamButton);
+    }
     container.appendChild(inProgressContainer);
 }
 

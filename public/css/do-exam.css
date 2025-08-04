@@ -1,3 +1,9 @@
+.answer-option:has(input[type="radio"]:checked) {
+    background: #e9d5c0;
+    border-color: #a67c52;
+    box-shadow: 0 2px 8px rgba(166,124,82,0.13);
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
 /* Actions container for buttons */
 .exam-actions {
     display: flex;
@@ -43,12 +49,12 @@ body {
 }
 
 h1 {
-    margin-bottom: 32px;
     color: #3a2c1a;
     letter-spacing: 1px;
     font-size: 2.2rem;
     font-weight: 700;
     text-align: center;
+    margin: 0;
 }
 
 #do-exam-form {
@@ -78,6 +84,9 @@ h1 {
     margin-bottom: 12px;
     font-size: 1.1rem;
     display: block;
+    word-break: break-word;
+    white-space: pre-line;
+    max-width: 100%;
 }
 
 .answers {
@@ -91,19 +100,43 @@ h1 {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 6px 0;
+    padding: 0.7em 1em;
+    border-radius: 8px;
+    background: #f8f4ef;
+    border: 1px solid #e2d3c2;
+    margin-bottom: 0.6em;
+    box-shadow: 0 1px 4px rgba(166,124,82,0.06);
+    transition: box-shadow 0.2s;
+}
+
+.answer-option:hover {
+    box-shadow: 0 2px 8px rgba(166,124,82,0.13);
+    background: #f3e4dd;
+    cursor: pointer;
+}
+
+.answer-option:last-child {
+    margin-bottom: 0;
 }
 
 .answer-option input[type="radio"] {
+    flex: 0 0 18px;
+    margin-top: 2px;
     accent-color: #a67c52;
     width: 18px;
     height: 18px;
 }
 
 .answer-option label {
+    flex: 1 1 0;
+    min-width: 0;
     font-size: 1rem;
     color: #3a2c1a;
     cursor: pointer;
+    word-break: break-word;
+    white-space: pre-line;
+    max-width: 100%;
+    display: block;
 }
 
 button[type="submit"] {
@@ -122,6 +155,13 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background: #0056b3;
     cursor: pointer;
+}
+
+.exam-teacher-text {
+    font-size: 1.3rem;
+    color: #5a4633;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 @media (max-width: 700px) {

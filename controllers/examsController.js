@@ -164,7 +164,7 @@ function calculateScore(exam, answers) {
             score += questionScore; // Assuming the first option is the correct answer
         }
     });
-    return score;
+    return Math.ceil(score);
 }
 
 exports.validateExamCode = async (req, res) => {
@@ -180,6 +180,13 @@ exports.validateExamCode = async (req, res) => {
     // Check if the exam is unavailable
     if (exam.status === 'private' || exam.status === 'done') {
         return res.status(400).json({ success: false, message: 'Exam is unavailable.' });
+    }
+
+    // Check if the user has already submitted this exam
+    const userID = req.user.id;
+    const alreadySubmitted = exam.submittions.some(submission => submission.userId.toString() === userID);
+    if (alreadySubmitted) {
+        return res.status(400).json({ success: false, message: 'You have already submitted this exam.' });
     }
 
     // Return the exam ID if the code is valid

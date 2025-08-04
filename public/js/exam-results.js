@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // set score with indicator
     const submission = exam.submittions.find(sub => sub.userId.toString() === userID);
-    const score = submission ? submission.score : 0;
+    const score = submission ? Math.ceil(submission.score) : 0;
     const scoreBlock = document.getElementById('score-block');
     let indicator = '';
     if (score < 56) {
@@ -54,7 +54,9 @@ async function fetchExamData(examID) {
 
 function renderQuestions(exam, userID) {
     const questionsResults = document.getElementById('questions-results');
-    const questionPoints = 100 / exam.questions.length;
+    // Calculate points per question
+    const firstQuestionPoints = Math.ceil(100 / exam.questions.length);
+    const questionPoints = (100 - firstQuestionPoints) / (exam.questions.length - 1);
     questionsResults.innerHTML = '';
     // Find the user's submission
     const submission = exam.submittions.find(sub => sub.userId.toString() === userID);
@@ -62,24 +64,35 @@ function renderQuestions(exam, userID) {
     exam.questions.forEach((q, idx) => {
         const block = document.createElement('div');
         block.className = 'result-block';
+        const chosen = chosenAnswers[idx];
+        const correct = 0; // correct answer is always index 0
+        let points = questionPoints;
+        if (idx === 0) {
+            points = firstQuestionPoints;
+        }
         block.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div class="question-header">
                 <span class="question-title">${idx + 1}. ${q.description}</span>
-                <span class="question-points">${questionPoints} pts</span>
+                <span class="question-points">${points} pts</span>
             </div>
             <div class="answers-list">
                 ${q.options.map((ans, aIdx) => {
                     let classes = '';
-                    const chosen = chosenAnswers[idx];
-                    const correct = 0; // correct answer is always index 0
+                    let label = '';
                     if (aIdx === chosen && aIdx === correct) {
                         classes = 'chosen-answer correct-answer';
+                        label = '<span class="answer-label correct-label">Correct answer</span>';
                     } else if (aIdx === chosen) {
                         classes = 'chosen-answer incorrect';
+                        label = '<span class="answer-label chosen-label">Your answer</span>';
                     } else if (aIdx === correct) {
                         classes = 'correct-answer';
+                        // Only show correct label if user got it wrong
+                        if (chosen !== correct) {
+                            label = '<span class="answer-label correct-label">Correct answer</span>';
+                        }
                     }
-                    return `<div class="answer-row"><span class="${classes}">${ans}</span></div>`;
+                    return `<div class="answer-row">${label ? label + '<br>' : ''}<span class="${classes}">${ans}</span></div>`;
                 }).join('')}
             </div>
         `;

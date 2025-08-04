@@ -1,8 +1,16 @@
-document.addEventListener('DOMContentLoaded', async function () {
-    // get the exam id from query string
-    const urlParams = new URLSearchParams(window.location.search);
-    const examID = urlParams.get('examID');
+// get the exam id from query string
+const urlParams = new URLSearchParams(window.location.search);
+const examID = urlParams.get('examID');
 
+// push initial state to history to detect back button click
+window.history.pushState(null, '', window.location.href);
+
+// prevent exit exam by clicking the back button
+window.addEventListener('popstate', function (event) {
+    confirmExitExam();
+});
+
+document.addEventListener('DOMContentLoaded', async function () {
     // Fetch exam data from server
     const examData = await fetchExamData(examID);
 
@@ -16,6 +24,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Set title
     document.title = exam.title;
     document.getElementById('exam-title').textContent = exam.title;
+    document.getElementById('exam-teacher').textContent = `Teacher: ${exam.createdBy.fullName}`;
 
     // Render questions
     renderQuestions(exam);
@@ -26,13 +35,26 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Handle exit exam button
     const exitBtn = document.getElementById('exit-exam-btn');
     if (exitBtn) {
-        exitBtn.addEventListener('click', function () {
-            if (confirm('Are you sure you want to exit the exam? Your answers will not be saved.')) {
-                window.location.href = '/';
-            }
-        });
+        exitBtn.addEventListener('click', () => confirmExitExam());
     }
 });
+
+function confirmExitExam() {
+    // Confirm exit
+    Swal.fire({
+        title: 'Exit Exam',
+        html: 'Are you sure you want to exit the exam?<br>Your score will be 0.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, exit',
+        cancelButtonText: 'No, stay'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            submitEmptyExam(examID);
+            window.location.href = '/';
+        }
+    });
+}
 
 async function fetchExamData(examID) {
     try {
@@ -69,7 +91,7 @@ function renderQuestions(exam) {
             <span class="question-title">${idx + 1}. ${q.description}</span>
             <div class="answers">
                 ${shuffledOptions.map((ans, aIdx) => `
-                    <div class="answer-option">
+                    <div class="answer-option" onclick="this.querySelector('input[type=radio]').checked = true;">
                         <input type="radio" id="q${idx}_a${aIdx}" name="question_${idx}" value="${ans}" required>
                         <label for="q${idx}_a${aIdx}">${ans}</label>
                     </div>
@@ -77,6 +99,26 @@ function renderQuestions(exam) {
             </div>
         `;
         questionsContainer.appendChild(block);
+    });
+}
+
+function submitEmptyExam(examID) {
+    fetch('/exams/submit-exam', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ examID, answers: [] }),
+        credentials: 'include'
+    })
+    .then(res => res.json())
+    .then(result => {
+        if (result.success) {
+            console.log('Exam submitted with no answers.');
+        } else {
+            console.error('Failed to submit empty exam:', result.message);
+        }
+    })
+    .catch(err => {
+        console.error('Error submitting empty exam:', err);
     });
 }
 

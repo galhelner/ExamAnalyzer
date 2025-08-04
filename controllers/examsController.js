@@ -87,7 +87,10 @@ exports.createExam = async (req, res) => {
 
 exports.getExamById = async (req, res) => {
     const examId = req.params.id;
-    const exam = await Exam.findById(examId);
+    const exam = await Exam.findById(examId)
+        .populate('createdBy', 'fullName email') // Populate teacher info
+        .populate('submittions.userId', 'fullName email'); // Populate student info
+
     if (!exam) {
         return res.status(404).json({ success: false, message: 'Exam not found.' });
     }

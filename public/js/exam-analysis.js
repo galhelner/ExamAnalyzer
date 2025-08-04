@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     renderAnalysis(exam);
     renderExamStateActions(exam);
+    renderStudentScoresTable(exam);
 
     document.getElementById('exit-analysis-btn').addEventListener('click', function () {
         window.location.href = '/';
@@ -100,14 +101,33 @@ function renderPrivateStateActions(exam, container) {
     deleteButton.textContent = 'Delete Exam';
     deleteButton.className = 'btn delete-btn';
     deleteButton.onclick = async () => {
-        if (confirm('Are you sure you want to delete this exam?')) {
-            const response = await fetch(`/exams/${exam._id}`, { method: 'DELETE' });
-            if (response.ok) {
-                alert('Exam deleted successfully.');
-                window.location.href = '/';
-            } else {
-                alert('Failed to delete exam.');
+        Swal.fire({
+            title: 'Deleting Exam...',
+            html: '<div class="swal2-loading-spinner"></div>',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            didOpen: () => {
+                Swal.showLoading();
             }
+        });
+        const response = await fetch(`/exams/${exam._id}`, { method: 'DELETE' });
+        if (response.ok) {
+            Swal.fire({
+                title: 'Deleted!',
+                text: 'Exam deleted.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                window.location.href = '/';
+            });
+        } else {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Failed to delete exam.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         }
     };
 
@@ -115,16 +135,37 @@ function renderPrivateStateActions(exam, container) {
     publishButton.textContent = 'Publish Exam';
     publishButton.className = 'btn publish-btn';
     publishButton.onclick = async () => {
+        Swal.fire({
+            title: 'Publishing Exam...',
+            html: '<div class="swal2-loading-spinner"></div>',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
         const response = await fetch(`/exams/publish-exam`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ examId: exam._id })
         });
         if (response.ok) {
-            alert('Exam published successfully.');
-            location.reload();
+            Swal.fire({
+                title: 'Published!',
+                text: 'Published exam.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                location.reload();
+            });
         } else {
-            alert('Failed to publish exam.');
+            Swal.fire({
+                title: 'Error!',
+                text: 'Failed to publish exam.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         }
     };
 
@@ -161,22 +202,103 @@ function renderInProgressStateActions(exam, container) {
     endExamButton.textContent = 'End Exam';
     endExamButton.className = 'btn end-exam-btn';
     endExamButton.onclick = async () => {
-        if (confirm('Are you sure you want to end this exam?')) {
-            const response = await fetch(`/exams/finish-exam`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ examId: exam._id })
-            });
-            if (response.ok) {
-                alert('Exam has been ended.');
-                location.reload();
-            } else {
-                alert('Failed to end exam.');
+        Swal.fire({
+            title: 'Ending Exam...',
+            html: '<div class="swal2-loading-spinner"></div>',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            didOpen: () => {
+                Swal.showLoading();
             }
+        });
+        const response = await fetch(`/exams/finish-exam`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ examId: exam._id })
+        });
+        if (response.ok) {
+            Swal.fire({
+                title: 'Ended!',
+                text: 'Ended exam.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                location.reload();
+            });
+        } else {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Failed to end exam.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         }
     };
 
     inProgressContainer.appendChild(codeContainer);
     inProgressContainer.appendChild(endExamButton);
     container.appendChild(inProgressContainer);
+}
+
+function renderStudentScoresTable(exam) {
+    if (exam.status !== 'in_progress' && exam.status !== 'done') {
+        return;
+    }
+
+    const container = document.getElementById('student-scores-table-container');
+    container.innerHTML = '';
+
+    // Add the heading above the table
+    const heading = document.createElement('div');
+    heading.textContent = 'Students grouped by grades:';
+    heading.className = 'student-grades-heading';
+    container.appendChild(heading);
+
+    const table = document.createElement('table');
+    table.className = 'student-scores-table';
+
+    const header = table.createTHead();
+    const headerRow = header.insertRow();
+    const headers = ['0-25', '25-50', '50-75', '75-100'];
+    headers.forEach(text => {
+        const th = document.createElement('th');
+        th.textContent = text;
+        headerRow.appendChild(th);
+    });
+
+    const tbody = table.createTBody();
+    const ranges = {
+        '0-25': [],
+        '25-50': [],
+        '50-75': [],
+        '75-100': []
+    };
+
+    exam.submittions.forEach(sub => {
+        const score = sub.score;
+        const studentName = sub.userId.fullName;
+
+        if (score >= 0 && score < 25) {
+            ranges['0-25'].push(studentName);
+        } else if (score >= 25 && score < 50) {
+            ranges['25-50'].push(studentName);
+        } else if (score >= 50 && score < 75) {
+            ranges['50-75'].push(studentName);
+        } else if (score >= 75 && score <= 100) {
+            ranges['75-100'].push(studentName);
+        }
+    });
+
+    const maxRows = Math.max(...Object.values(ranges).map(r => r.length));
+
+    for (let i = 0; i < maxRows; i++) {
+        const row = tbody.insertRow();
+        headers.forEach(header => {
+            const cell = row.insertCell();
+            cell.textContent = ranges[header][i] || '';
+        });
+    }
+
+    container.appendChild(table);
 }

@@ -45,6 +45,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Render exams on the page
 function renderExams(exams) {
+  if (!exams || exams.length === 0) {
+    const noExamsMessage = document.createElement('p');
+    noExamsMessage.innerText = 'You have no submitted exams yet.';
+    noExamsMessage.classList.add('no-exams-message');
+    grid.appendChild(noExamsMessage);
+    return;
+  }
   exams.forEach(exam => {
     const card = createCard(exam);
     grid.appendChild(card);

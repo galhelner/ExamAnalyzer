@@ -28,6 +28,10 @@ body {
 }
 
 h1 {
+    position: absolute;
+    top: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
     font-size: 2rem;
     color: #333;
     margin: 2rem 0 2rem 0;
@@ -41,7 +45,7 @@ h1 {
     padding: 1rem;
     margin: 0 auto 3.5rem auto;
     width: 70%;
-    max-height: calc(100vh - 10rem); /* Leave space for button at bottom */
+    max-height: calc(100vh - 15rem); /* Leave space for button at bottom */
     overflow-y: auto;
     background: transparent;
 }
@@ -57,6 +61,14 @@ h1 {
 
 .exams-grid::-webkit-scrollbar-thumb:hover {
     background-color: #aaa;
+}
+
+.no-exams-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+    margin-top: 2rem;
 }
 
 .card {
@@ -213,6 +225,10 @@ h1 {
 }
 
 .start-exam-button {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
     display: block;
     margin: 1rem auto 1rem auto;
     height: 70px;

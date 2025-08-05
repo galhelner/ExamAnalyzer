@@ -1,4 +1,4 @@
-/* Animation for copy button when clicked */
+
 .disabled-btn {
     opacity: 0.6;
     pointer-events: none;
@@ -256,8 +256,11 @@ h1 {
 
 /* Wrapper styles to ensure proper table sizing */
 .popup-table-wrapper {
-    width: 100%;
+    display: flex;
+    justify-content: center;
     box-sizing: border-box;
+    width: auto;
+    padding: 0;
 }
 
 /* Groups table specific styles */
@@ -429,7 +432,8 @@ body.popup-open {
     padding: 32px 28px 24px 28px;
     margin: 0 1rem 0 1rem;
     min-width: 340px;
-    max-width: 95vw;
+    max-width: 600px;
+    width: auto;
     max-height: 80vh;
     overflow: hidden;
     position: relative;

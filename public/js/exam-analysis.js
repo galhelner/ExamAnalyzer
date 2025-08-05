@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById('exam-title').textContent = exam.title;
     
 
-    renderAnalysis(exam);
+    renderQuestions(exam);
     renderExamStateActions(exam);
 
     // Remove the table from the page, only show via popup
@@ -48,7 +48,10 @@ async function fetchExamData(examID) {
     }
 }
 
-function renderAnalysis(exam) {
+/*
+ * Renders the exam questions and answer statistics to the page
+*/
+function renderQuestions(exam) {
     const questionsResults = document.getElementById('questions-results');
     questionsResults.innerHTML = '';
 
@@ -63,16 +66,10 @@ function renderAnalysis(exam) {
         return counts;
     });
 
-    const firstQuestionPoints = Math.ceil(100 / exam.questions.length);
-    const questionPoints = (100 - firstQuestionPoints) / (exam.questions.length - 1);
-
     exam.questions.forEach((q, idx) => {
         const block = document.createElement('div');
         block.className = 'result-block';
-        let points = questionPoints;
-        if (idx === 0) {
-            points = firstQuestionPoints;
-        }
+        const points = q.points;
         let content = `
             <div class="question-header">
                 <span class="question-title">${idx + 1}. ${q.description}</span>
@@ -93,7 +90,9 @@ function renderAnalysis(exam) {
         questionsResults.appendChild(block);
     });
 }
-
+/*
+ * Displays action buttons based on the exam's current status.
+*/
 function renderExamStateActions(exam) {
     const actionButtonsContainer = document.getElementById('action-buttons');
     actionButtonsContainer.innerHTML = '';
@@ -109,6 +108,9 @@ function renderExamStateActions(exam) {
     }
 }
 
+/*
+ * Renders buttons for deleting or publishing a private exam.
+*/
 function renderPrivateStateActions(exam, container) {
     // Create a flex container for horizontal stacking
     const privateBtnContainer = document.createElement('div');
@@ -191,6 +193,10 @@ function renderPrivateStateActions(exam, container) {
     container.appendChild(privateBtnContainer);
 }
 
+/*
+ * Renders controls for in-progress or finished exams, 
+   including code, group, and grading popups.
+*/
 function renderInProgressStateActions(exam, container) {
     const inProgressContainer = document.createElement('div');
     inProgressContainer.className = 'in-progress-container';
@@ -322,6 +328,9 @@ function renderInProgressStateActions(exam, container) {
     container.appendChild(inProgressContainer);
 }
 
+/*
+ * Creates a table grouping students by score ranges for the exam.
+*/
 function renderGroupTbl(exam, asElement = false) {
     if (exam.status !== 'in_progress' && exam.status !== 'done') {
         return null;
@@ -370,6 +379,9 @@ function renderGroupTbl(exam, asElement = false) {
     return tableWrapper;
 }
 
+/*
+ * Creates a table listing students' names, emails, and scores for the exam.
+*/
 function renderGradesTbl(exam) {
     if (exam.status !== 'in_progress' && exam.status !== 'done') {
         return null;
@@ -397,6 +409,9 @@ function renderGradesTbl(exam) {
     return tableWrapper;
 }
 
+/*
+ * Displays a popup containing a table and handles closing the popup.
+*/
 function showTablePopup(tableElement) {
     const popupContainer = document.getElementById('table-popup-container');
     popupContainer.innerHTML = '';

@@ -21,11 +21,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     renderAnalysis(exam);
     renderExamStateActions(exam);
-    renderStudentScoresTable(exam);
 
-    document.getElementById('exit-analysis-btn').addEventListener('click', function () {
-        window.location.href = '/';
-    });
+    // Remove the table from the page, only show via popup
+    const scoresTableContainer = document.getElementById('student-scores-table-container');
+    scoresTableContainer.innerHTML = '';
 });
 
 async function fetchExamData(examID) {
@@ -88,15 +87,17 @@ function renderExamStateActions(exam) {
             renderPrivateStateActions(exam, actionButtonsContainer);
             break;
         case 'in_progress':
-            renderInProgressStateActions(exam, actionButtonsContainer);
-            break;
         case 'done':
-            // No actions for done state
+            renderInProgressStateActions(exam, actionButtonsContainer);
             break;
     }
 }
 
 function renderPrivateStateActions(exam, container) {
+    // Create a flex container for horizontal stacking
+    const privateBtnContainer = document.createElement('div');
+    privateBtnContainer.className = 'private-btn-container';
+
     const deleteButton = document.createElement('button');
     deleteButton.textContent = 'Delete Exam';
     deleteButton.className = 'btn delete-btn';
@@ -169,8 +170,9 @@ function renderPrivateStateActions(exam, container) {
         }
     };
 
-    container.appendChild(deleteButton);
-    container.appendChild(publishButton);
+    privateBtnContainer.appendChild(deleteButton);
+    privateBtnContainer.appendChild(publishButton);
+    container.appendChild(privateBtnContainer);
 }
 
 function renderInProgressStateActions(exam, container) {
@@ -180,84 +182,112 @@ function renderInProgressStateActions(exam, container) {
     const codeContainer = document.createElement('div');
     codeContainer.className = 'code-container';
 
-    const codeInput = document.createElement('input');
-    codeInput.type = 'text';
-    codeInput.value = exam.examCode;
-    codeInput.readOnly = true;
-    codeInput.className = 'exam-code-input';
+    // Only show exam code and copy button if exam is in progress
+    if (exam.status === 'in_progress') {
+        // Create wrapper for code input and copy button
+        const codeInputWrapper = document.createElement('div');
+        codeInputWrapper.className = 'code-input-wrapper';
 
-    const copyButton = document.createElement('button');
-    copyButton.className = 'copy-btn';
-    copyButton.innerHTML = '<img src="images/copy-icon.png" alt="Copy">'; // Placeholder for copy icon
-    copyButton.onclick = () => {
-        codeInput.select();
-        document.execCommand('copy');
-        alert('Exam code copied to clipboard!');
+        const codeInput = document.createElement('input');
+        codeInput.type = 'text';
+        codeInput.value = exam.examCode;
+        codeInput.readOnly = true;
+        codeInput.className = 'exam-code-input';
+
+        const copyButton = document.createElement('button');
+        copyButton.className = 'copy-btn';
+        copyButton.innerHTML = '<img src="images/copy-icon.png" alt="Copy">'; // Placeholder for copy icon
+        copyButton.onclick = () => {
+            codeInput.select();
+            document.execCommand('copy');
+            alert('Exam code copied to clipboard!');
+        };
+
+        // Add input and copy button to the wrapper
+        codeInputWrapper.appendChild(codeInput);
+        codeInputWrapper.appendChild(copyButton);
+        
+        // Add the wrapper to the container
+        codeContainer.appendChild(codeInputWrapper);
+    }
+
+    // Create and add popup buttons for groups and grading
+    const showGroupsBtn = document.createElement('button');
+    showGroupsBtn.textContent = 'Show Groups by Grades';
+    showGroupsBtn.className = 'btn popup-btn same-size-btn';
+    
+    const showGradesBtn = document.createElement('button');
+    showGradesBtn.textContent = 'Show Grading';
+    showGradesBtn.className = 'btn popup-btn same-size-btn';
+    
+    const buttonsDiv = document.createElement('div');
+    buttonsDiv.className = 'popup-buttons';
+    buttonsDiv.appendChild(showGroupsBtn);
+    buttonsDiv.appendChild(showGradesBtn);
+    codeContainer.appendChild(buttonsDiv);
+    
+    showGroupsBtn.onclick = () => {
+        showTablePopup(renderStudentScoresTable(exam, true));
+    };
+    showGradesBtn.onclick = () => {
+        showTablePopup(renderAltStudentTable(exam));
     };
 
-    codeContainer.appendChild(codeInput);
-    codeContainer.appendChild(copyButton);
-
-    const endExamButton = document.createElement('button');
-    endExamButton.textContent = 'End Exam';
-    endExamButton.className = 'btn end-exam-btn';
-    endExamButton.onclick = async () => {
-        Swal.fire({
-            title: 'Ending Exam...',
-            html: '<div class="swal2-loading-spinner"></div>',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            showConfirmButton: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
-        const response = await fetch(`/exams/finish-exam`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ examId: exam._id })
-        });
-        if (response.ok) {
-            Swal.fire({
-                title: 'Ended!',
-                text: 'Ended exam.',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            }).then(() => {
-                location.reload();
-            });
-        } else {
-            Swal.fire({
-                title: 'Error!',
-                text: 'Failed to end exam.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-        }
-    };
-
+    // Add the code container
     inProgressContainer.appendChild(codeContainer);
-    inProgressContainer.appendChild(endExamButton);
+    
+    // Only add end exam button if exam is in progress
+    if (exam.status === 'in_progress') {
+        const endExamButton = document.createElement('button');
+        endExamButton.textContent = 'End Exam';
+        endExamButton.className = 'btn end-exam-btn';
+        endExamButton.onclick = async () => {
+            Swal.fire({
+                title: 'Ending Exam...',
+                html: '<div class="swal2-loading-spinner"></div>',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            const response = await fetch(`/exams/finish-exam`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ examId: exam._id })
+            });
+            if (response.ok) {
+                Swal.fire({
+                    title: 'Ended!',
+                    text: 'Ended exam.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to end exam.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        };
+        inProgressContainer.appendChild(endExamButton);
+    }
     container.appendChild(inProgressContainer);
 }
 
-function renderStudentScoresTable(exam) {
+function renderStudentScoresTable(exam, asElement = false) {
     if (exam.status !== 'in_progress' && exam.status !== 'done') {
-        return;
+        return null;
     }
-
-    const container = document.getElementById('student-scores-table-container');
-    container.innerHTML = '';
-
-    // Add the heading above the table
-    const heading = document.createElement('div');
-    heading.textContent = 'Students grouped by grades:';
-    heading.className = 'student-grades-heading';
-    container.appendChild(heading);
-
+    const tableWrapper = document.createElement('div');
+    tableWrapper.className = 'popup-table-wrapper';
     const table = document.createElement('table');
-    table.className = 'student-scores-table';
-
+    table.className = 'student-scores-table groups-table';
     const header = table.createTHead();
     const headerRow = header.insertRow();
     const headers = ['0-25', '25-50', '50-75', '75-100'];
@@ -266,7 +296,6 @@ function renderStudentScoresTable(exam) {
         th.textContent = text;
         headerRow.appendChild(th);
     });
-
     const tbody = table.createTBody();
     const ranges = {
         '0-25': [],
@@ -274,11 +303,9 @@ function renderStudentScoresTable(exam) {
         '50-75': [],
         '75-100': []
     };
-
     exam.submittions.forEach(sub => {
         const score = sub.score;
         const studentName = sub.userId.fullName;
-
         if (score >= 0 && score < 25) {
             ranges['0-25'].push(studentName);
         } else if (score >= 25 && score < 50) {
@@ -289,9 +316,7 @@ function renderStudentScoresTable(exam) {
             ranges['75-100'].push(studentName);
         }
     });
-
     const maxRows = Math.max(...Object.values(ranges).map(r => r.length));
-
     for (let i = 0; i < maxRows; i++) {
         const row = tbody.insertRow();
         headers.forEach(header => {
@@ -299,6 +324,61 @@ function renderStudentScoresTable(exam) {
             cell.textContent = ranges[header][i] || '';
         });
     }
+    tableWrapper.appendChild(table);
+    return tableWrapper;
+}
 
-    container.appendChild(table);
+function renderAltStudentTable(exam) {
+    if (exam.status !== 'in_progress' && exam.status !== 'done') {
+        return null;
+    }
+    const tableWrapper = document.createElement('div');
+    tableWrapper.className = 'popup-table-wrapper';
+    const table = document.createElement('table');
+    table.className = 'student-scores-table grades-table';
+    const header = table.createTHead();
+    const headerRow = header.insertRow();
+    const headers = ['Full Name', 'Email', 'Score'];
+    headers.forEach((text) => {
+        const th = document.createElement('th');
+        th.textContent = text;
+        headerRow.appendChild(th);
+    });
+    const tbody = table.createTBody();
+    exam.submittions.forEach(sub => {
+        const row = tbody.insertRow();
+        row.insertCell().textContent = sub.userId.fullName;
+        row.insertCell().textContent = sub.userId.email;
+        row.insertCell().textContent = sub.score;
+    });
+    tableWrapper.appendChild(table);
+    return tableWrapper;
+}
+
+function showTablePopup(tableElement) {
+    const popupContainer = document.getElementById('table-popup-container');
+    popupContainer.innerHTML = '';
+    // Disable background scroll using class
+    document.body.classList.add('popup-open');
+    const overlay = document.createElement('div');
+    overlay.className = 'popup-overlay';
+    const popup = document.createElement('div');
+    popup.className = 'popup-table';
+    // Custom close button styled like student exam popup
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'popup-close-btn custom-x';
+    closeBtn.setAttribute('aria-label', 'Close');
+    closeBtn.innerHTML = `<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="14" r="14" fill="#e74c3c"/><path d="M9.5 9.5L18.5 18.5" stroke="white" stroke-width="2.5" stroke-linecap="round"/><path d="M18.5 9.5L9.5 18.5" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+    function closePopup() {
+        popupContainer.innerHTML = '';
+        document.body.classList.remove('popup-open');
+    }
+    closeBtn.onclick = closePopup;
+    overlay.onclick = (e) => {
+        if (e.target === overlay) closePopup();
+    };
+    popup.appendChild(closeBtn);
+    popup.appendChild(tableElement);
+    overlay.appendChild(popup);
+    popupContainer.appendChild(overlay);
 }

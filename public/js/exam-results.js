@@ -60,7 +60,7 @@ function renderQuestions(exam, userID) {
     const questionPoints = (100 - firstQuestionPoints) / (exam.questions.length - 1);
     questionsResults.innerHTML = '';
     // Find the user's submission
-    const submission = exam.submittions.find(sub => sub.userId.toString() === userID);
+    const submission = exam.submittions.find(sub => sub.userId._id.toString() === userID);
     const chosenAnswers = submission ? submission.answers : [];
     exam.questions.forEach((q, idx) => {
         const block = document.createElement('div');

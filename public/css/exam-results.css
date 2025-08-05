@@ -186,6 +186,15 @@ h1 {
     box-shadow: 0 1px 4px rgba(166,124,82,0.06);
 }
 
+.no-answers {
+    text-align: center;
+    color: #a67c52;
+    background-color: #f8f4ef;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    margin-top: 20px;
+}
+
 #questions-results {
     display: flex;
     flex-direction: column;

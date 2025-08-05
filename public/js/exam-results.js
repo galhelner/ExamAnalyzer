@@ -76,6 +76,16 @@ function renderQuestions(exam, userID) {
     // Find the user's submission
     const submission = exam.submittions.find(sub => sub.userId._id.toString() === userID);
     const chosenAnswers = submission ? submission.answers : [];
+
+    if (chosenAnswers.length === 0) {
+        questionsResults.innerHTML = `
+        <div class="no-answers">
+            <p>No answers submitted!</p>
+        </div>
+        `;
+        return;
+    }
+
     exam.questions.forEach((q, idx) => {
         const block = document.createElement('div');
         block.className = 'result-block';

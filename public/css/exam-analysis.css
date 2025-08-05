@@ -245,7 +245,6 @@ h1 {
     text-overflow: ellipsis;
 }
 
-/* Table Styles */
 .student-scores-table {
     width: 100%;
     border-collapse: collapse;
@@ -254,7 +253,6 @@ h1 {
     box-sizing: border-box; 
 }
 
-/* Wrapper styles to ensure proper table sizing */
 .popup-table-wrapper {
     display: flex;
     justify-content: center;
@@ -263,33 +261,31 @@ h1 {
     padding: 0;
 }
 
-/* Groups table specific styles */
 .groups-table {
     width: 100%;
 }
 
 .groups-table th,
 .groups-table td {
-    width: 25%; /* Equal width for all columns */
+    width: 25%; 
     box-sizing: border-box;
 }
 
-/* Grades table specific styles */
 .grades-table th:nth-child(1),
 .grades-table td:nth-child(1) {
-    width: 30%; /* Medium size for Full Name */
+    width: 30%; 
     box-sizing: border-box;
 }
 
 .grades-table th:nth-child(2),
 .grades-table td:nth-child(2) {
-    width: 50%; /* Largest size for Email */
+    width: 50%; 
     box-sizing: border-box;
 }
 
 .grades-table th:nth-child(3),
 .grades-table td:nth-child(3) {
-    width: 20%; /* Smallest size for Score */
+    width: 20%; 
     box-sizing: border-box;
 }
 
@@ -410,8 +406,6 @@ body.popup-open {
     margin-top: 20px;
 }
 
-
-/* Popup styles */
 .popup-overlay {
     position: fixed;
     top: 0;

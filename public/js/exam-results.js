@@ -91,14 +91,10 @@ function renderQuestions(exam, userID) {
         block.className = 'result-block';
         const chosen = chosenAnswers[idx];
         const correct = 0; // correct answer is always index 0
-        let points = questionPoints;
-        if (idx === 0) {
-            points = firstQuestionPoints;
-        }
         block.innerHTML = `
             <div class="question-header">
                 <span class="question-title">${idx + 1}. ${q.description}</span>
-                <span class="question-points">${points} pts</span>
+                <span class="question-points">${q.points} pts</span>
             </div>
             <div class="answers-list">
                 ${q.options.map((ans, aIdx) => {

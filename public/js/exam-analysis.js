@@ -227,10 +227,10 @@ function renderInProgressStateActions(exam, container) {
     codeContainer.appendChild(buttonsDiv);
     
     showGroupsBtn.onclick = () => {
-        showTablePopup(renderStudentScoresTable(exam, true));
+        showTablePopup(renderGroupTbl(exam, true));
     };
     showGradesBtn.onclick = () => {
-        showTablePopup(renderAltStudentTable(exam));
+        showTablePopup(renderGradesTbl(exam));
     };
 
     // Add the code container
@@ -280,7 +280,7 @@ function renderInProgressStateActions(exam, container) {
     container.appendChild(inProgressContainer);
 }
 
-function renderStudentScoresTable(exam, asElement = false) {
+function renderGroupTbl(exam, asElement = false) {
     if (exam.status !== 'in_progress' && exam.status !== 'done') {
         return null;
     }
@@ -328,7 +328,7 @@ function renderStudentScoresTable(exam, asElement = false) {
     return tableWrapper;
 }
 
-function renderAltStudentTable(exam) {
+function renderGradesTbl(exam) {
     if (exam.status !== 'in_progress' && exam.status !== 'done') {
         return null;
     }
@@ -364,11 +364,10 @@ function showTablePopup(tableElement) {
     overlay.className = 'popup-overlay';
     const popup = document.createElement('div');
     popup.className = 'popup-table';
-    // Custom close button styled like student exam popup
     const closeBtn = document.createElement('button');
-    closeBtn.className = 'popup-close-btn custom-x';
+    closeBtn.className = 'close-button';
     closeBtn.setAttribute('aria-label', 'Close');
-    closeBtn.innerHTML = `<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="14" r="14" fill="#e74c3c"/><path d="M9.5 9.5L18.5 18.5" stroke="white" stroke-width="2.5" stroke-linecap="round"/><path d="M18.5 9.5L9.5 18.5" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+    closeBtn.innerHTML = '&times;';
     function closePopup() {
         popupContainer.innerHTML = '';
         document.body.classList.remove('popup-open');

@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const exam = examData.data;
     document.title = exam.title;
     document.getElementById('exam-title').textContent = exam.title;
+    
 
     renderAnalysis(exam);
     renderExamStateActions(exam);
@@ -27,7 +28,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     scoresTableContainer.innerHTML = '';
 
     // Handle exit button
-    document.getElementById('exit-analysis-btn').addEventListener('click', function () {
+    const exitButton = document.getElementById('exit-analysis-btn');
+    exitButton.style.display = 'block';  // Make the button visible
+    exitButton.addEventListener('click', function () {
         window.location.href = '/';
     });
 });

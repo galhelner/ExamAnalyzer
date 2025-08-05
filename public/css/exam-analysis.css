@@ -227,6 +227,7 @@ h1 {
 }
 
 .exit-btn {
+    display: none; /* Initially hidden to prevent user interaction */
     width: 40%;
     align-self: center;
     padding: 12px;

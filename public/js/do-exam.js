@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
     
     const exam = examData.data;
+    console.log('Exam data:', exam);
 
     // Set title
     document.title = exam.title;

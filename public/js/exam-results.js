@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById('exam-teacher').textContent = `Teacher: ${exam.createdBy.fullName}`;
 
     // set score with indicator
-    const submission = exam.submittions.find(sub => sub.userId._id.toString() === userID);
+    const submission = exam.submittions[0];
     const score = submission ? Math.ceil(submission.score) : 0;
     const scoreBlock = document.getElementById('score-block');
     let indicator = '';

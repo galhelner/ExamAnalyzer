@@ -87,6 +87,8 @@ exports.createExam = async (req, res) => {
 
 exports.getExamById = async (req, res) => {
     const examId = req.params.id;
+    const userID = req.user.id;
+   
     const exam = await Exam.findById(examId)
         .populate('createdBy', 'fullName email') // Populate teacher info
         .populate('submittions.userId', 'fullName email'); // Populate student info
@@ -94,6 +96,9 @@ exports.getExamById = async (req, res) => {
     if (!exam) {
         return res.status(404).json({ success: false, message: 'Exam not found.' });
     }
+
+    // remove all submittions except the one from the current user
+    exam.submittions = exam.submittions.filter(submission => submission.userId._id.toString() === userID);
 
     return res.status(200).json({ success: true, data: exam });
 }

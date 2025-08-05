@@ -209,7 +209,7 @@ function showStartExamPopup() {
     });
   });
 
-  const overlay = document.getElementById('ovelay');
+  const overlay = document.getElementById('overlay');
   overlay.classList.remove('hidden');
 
   const closeButton = document.getElementById('closePopup');

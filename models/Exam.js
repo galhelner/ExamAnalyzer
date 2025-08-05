@@ -6,6 +6,7 @@ const examSchema = new mongoose.Schema({
         {
             description: { type: String, required: true },
             options: { type: [String], required: true },
+            points: { type: Number, required: true },
         }
     ],
     createdAt: { type: Date, default: Date.now },

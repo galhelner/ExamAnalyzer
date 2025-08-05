@@ -213,22 +213,21 @@ function renderInProgressStateActions(exam, container) {
         const copyButton = document.createElement('button');
         copyButton.className = 'copy-btn';
         copyButton.innerHTML = '<img src="images/copy-icon.png" alt="Copy">'; // Placeholder for copy icon
-        copyButton.onclick = () => {
-            // Copy code to clipboard without selecting the input
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(codeInput.value);
-            } else {
-                // Fallback for older browsers
-                codeInput.setAttribute('readonly', '');
+        copyButton.onclick = async () => {
+            try {
+                // modern async clipboard API
+                await navigator.clipboard.writeText(codeInput.value);
+            } catch (err) {
+                console.warn('Clipboard API failed, please copy manually', err);
+                // fallback: select the text and prompt user
+                codeInput.removeAttribute('readonly');
                 codeInput.select();
-                document.execCommand('copy');
-                window.getSelection().removeAllRanges();
+                alert('Failed to copy code. Press ⌘+C (or Ctrl+C) to copy');
+                codeInput.setAttribute('readonly', '');
             }
-            // Animate button to show it was clicked
+            // animate the button click
             copyButton.classList.add('clicked');
-            setTimeout(() => {
-                copyButton.classList.remove('clicked');
-            }, 300);
+            setTimeout(() => copyButton.classList.remove('clicked'), 300);
         };
 
         // Add input and copy button to the wrapper

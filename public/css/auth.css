@@ -22,8 +22,9 @@ body {
 
 .form-box,
 .info-box {
+  position: relative;
   width: 50%;
-  padding: 40px;
+  padding: 30px;
   box-sizing: border-box;
   transition: transform 1s ease;
   display: flex;
@@ -59,6 +60,28 @@ form {
   align-items: center;
 }
 
+h1 {
+  margin: 0;
+  font-size: 30px;
+  color: #333;
+}
+
+h2 {
+  position: absolute;
+  top: 4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+p {
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 40px;
+}
+
 input {
   width: 80%;
   padding: 12px;
@@ -75,17 +98,37 @@ input:focus {
 
 button {
   padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  position: absolute;
+  left: 50%;
+  bottom: 4rem;
+  transform: translateX(-50%);
+}
+
+.form-box button {
   background: #4a90e2;
   border: none;
   color: white;
-  font-size: 16px;
-  cursor: pointer;
   border-radius: 5px;
-  margin: 20px 0 20px 0;
 }
 
-button:hover {
+.form-box button:hover {
   background: #3b7dd8;
+}
+
+.toggle-button {
+  background: #f7a08c;
+  border: 1px solid black;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.toggle-button:hover {
+  background: #ff856a;
 }
 
 img {

@@ -14,8 +14,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   sessionStorage.setItem('userRole', userRole);
   sessionStorage.setItem('userID', userID);
 
-  // set user name in the drop-down menu
+  // set user details in the drop-down menu
   document.getElementById('userName').innerText = userName;
+  let userAvatar = '/images/teacher-icon.png';
+  if (userRole === 'student') {
+    userAvatar = '/images/student-icon.png';
+  }
+  document.getElementById('userAvatar').src = userAvatar;
 
   // set page design based on user role
   if (userRole === teacherRole) {

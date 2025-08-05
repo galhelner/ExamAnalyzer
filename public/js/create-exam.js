@@ -18,16 +18,21 @@ function createQuestionElement(index) {
     const div = document.createElement('div');
     div.className = 'question-block';
     div.innerHTML = `
-                <label>Question ${index + 1}:</label>
-                <textarea class="auto-expand" name="questions[${index}][description]" placeholder="Enter question" required autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-                <div class="answers">
-                    <textarea class="auto-expand" name="questions[${index}][answers][0]" placeholder="Answer 1 - The correct answer!" required autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-                    <textarea class="auto-expand" name="questions[${index}][answers][1]" placeholder="Answer 2" required autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-                    <textarea class="auto-expand" name="questions[${index}][answers][2]" placeholder="Answer 3" required autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-                    <textarea class="auto-expand" name="questions[${index}][answers][3]" placeholder="Answer 4" required autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-                </div>
-                <button type="button" class="remove-question-btn">Remove</button>
-            `;
+        <div class="question-top-row">
+            <label class="question-label">Question ${index + 1}:</label>
+            <div class="points-input-group">
+                <input type="number" class="question-points" name="questions[${index}][points]" min="1" max="100" placeholder="Points" required>
+            </div>
+            <button type="button" class="remove-question-btn">Remove</button>
+        </div>
+        <textarea class="auto-expand" name="questions[${index}][description]" placeholder="Enter question" required autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+        <div class="answers">
+            <textarea class="auto-expand" name="questions[${index}][answers][0]" placeholder="Answer 1 - The correct answer!" required autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+            <textarea class="auto-expand" name="questions[${index}][answers][1]" placeholder="Answer 2" required autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+            <textarea class="auto-expand" name="questions[${index}][answers][2]" placeholder="Answer 3" required autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+            <textarea class="auto-expand" name="questions[${index}][answers][3]" placeholder="Answer 4" required autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+        </div>
+    `;
     // Add auto-expand event listeners to textareas
     div.querySelectorAll('textarea.auto-expand').forEach(textarea => {
         textarea.addEventListener('input', function() {
@@ -49,6 +54,8 @@ function updateQuestionLabels() {
     const blocks = document.querySelectorAll('.question-block');
     blocks.forEach((block, idx) => {
         block.querySelector('label').textContent = `Question ${idx + 1}:`;
+        // Update points input name
+        block.querySelector('.question-points').setAttribute('name', `questions[${idx}][points]`);
         // Update textarea name for question description
         block.querySelector('textarea.auto-expand').setAttribute('name', `questions[${idx}][description]`);
         const answerInputs = block.querySelectorAll('.answers textarea');
@@ -81,18 +88,33 @@ function createExam(e) {
         return;
     }
     const questions = [];
+    let totalPoints = 0;
+    let pointsValid = true;
     const questionBlocks = document.querySelectorAll('.question-block');
     questionBlocks.forEach((block, idx) => {
         const questionText = block.querySelector('textarea.auto-expand').value.trim();
         const answerInputs = block.querySelectorAll('.answers textarea');
         const answers = Array.from(answerInputs).map(input => input.value.trim());
-        questions.push({ description: questionText, answers });
+        const pointsInput = block.querySelector('.question-points');
+        const points = parseInt(pointsInput.value, 10);
+        if (isNaN(points) || points < 1) pointsValid = false;
+        totalPoints += points;
+        questions.push({ description: questionText, answers, points });
     });
 
     if (questions.length === 0) {
         Swal.fire({
             title: 'Error!',
             text: 'You must add at least one question.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+    if (!pointsValid || totalPoints !== 100) {
+        Swal.fire({
+            title: 'Error!',
+            text: 'Total points must be exactly 100.',
             icon: 'error',
             confirmButtonText: 'OK'
         });
@@ -142,3 +164,33 @@ function createExam(e) {
 
 // Attach submit event to form
 document.getElementById('create-exam-form').addEventListener('submit', createExam);
+
+// Set Points Evenly button logic
+document.getElementById('set-points-evenly-btn').onclick = function () {
+    const blocks = document.querySelectorAll('.question-block');
+    const n = blocks.length;
+    if (n === 0) return;
+    let even = Math.floor(100 / n);
+    let remainder = 100 - even * n;
+    if (remainder === 0) {
+        // Set all to even
+        blocks.forEach(block => {
+            block.querySelector('.question-points').value = even;
+        });
+    } else {
+        // Set first to ceil, rest to floor
+        let ceil = Math.ceil(100 / n);
+        blocks[0].querySelector('.question-points').value = ceil;
+        let rest = Math.floor((100 - ceil) / (n - 1));
+        let used = ceil;
+        for (let i = 1; i < n; ++i) {
+            // For last, use remaining to ensure sum is 100
+            if (i === n - 1) {
+                blocks[i].querySelector('.question-points').value = 100 - used;
+            } else {
+                blocks[i].querySelector('.question-points').value = rest;
+                used += rest;
+            }
+        }
+    }
+};

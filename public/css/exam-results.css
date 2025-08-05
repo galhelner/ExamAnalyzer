@@ -153,11 +153,18 @@ body {
 }
 
 h1 {
-    margin-bottom: 32px;
+    margin: 0;
     color: #3a2c1a;
     letter-spacing: 1px;
     font-size: 2.2rem;
     font-weight: 700;
+    text-align: center;
+}
+
+.exam-teacher-text {
+    font-size: 1.3rem;
+    color: #5a4633;
+    margin: 20px 0 20px 0;
     text-align: center;
 }
 
@@ -177,6 +184,15 @@ h1 {
     padding: 14px;
     margin-bottom: 24px;
     box-shadow: 0 1px 4px rgba(166,124,82,0.06);
+}
+
+.no-answers {
+    text-align: center;
+    color: #a67c52;
+    background-color: #f8f4ef;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    margin-top: 20px;
 }
 
 #questions-results {

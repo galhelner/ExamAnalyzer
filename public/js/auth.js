@@ -1,6 +1,5 @@
 const container = document.getElementById('authContainer');
-const toggleLink = document.getElementById('toggleLink');
-const toggleText = document.getElementById('toggleText');
+const toggleButton = document.getElementById('toggleButton');
 const formTitle = document.getElementById('formTitle');
 const infoTitle = document.getElementById('infoTitle');
 const infoText = document.getElementById('infoText');
@@ -23,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-toggleLink.addEventListener('click', (e) => {
+toggleButton.addEventListener('click', (e) => {
   e.preventDefault();
   isLogin = !isLogin;
   container.classList.toggle('register');
@@ -34,8 +33,7 @@ toggleLink.addEventListener('click', (e) => {
     submitButton.textContent = 'Register';
     infoTitle.textContent = 'Join Us!';
     infoText.textContent = 'Sign up and explore our platform.';
-    toggleLink.textContent = 'Login';
-    toggleText.textContent = 'Already have an account? ';
+    toggleButton.textContent = 'Login';
     roleSelector.style.display = 'flex';
     roleDropdown.disabled = false;
     roleDropdown.required = true;
@@ -47,8 +45,7 @@ toggleLink.addEventListener('click', (e) => {
     submitButton.textContent = 'Login';
     infoTitle.textContent = 'Welcome Back!';
     infoText.textContent = 'Login to continue your journey.';
-    toggleLink.textContent = 'Register';
-    toggleText.textContent = 'Don\'t have an account? ';
+    toggleButton.textContent = 'Register';
     roleSelector.style.display = 'none';
     roleDropdown.disabled = true;
     roleDropdown.required = false;

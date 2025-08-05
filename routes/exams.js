@@ -13,7 +13,7 @@ router.put('/:id', examsController.editExam);
 router.get('/my-exams', requireAuth, examsController.getMyExams);
 
 // get exam by ID endpoint
-router.get('/:id', examsController.getExamById);
+router.get('/:id', requireAuth, examsController.getExamById);
 
 // create exam endpoint
 router.post('/create-exam', requireAuth, examsController.createExam);

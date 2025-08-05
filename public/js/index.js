@@ -14,8 +14,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   sessionStorage.setItem('userRole', userRole);
   sessionStorage.setItem('userID', userID);
 
-  // set user name in the drop-down menu
+  // set user details in the drop-down menu
   document.getElementById('userName').innerText = userName;
+  let userAvatar = '/images/teacher-icon.png';
+  if (userRole === 'student') {
+    userAvatar = '/images/student-icon.png';
+  }
+  document.getElementById('userAvatar').src = userAvatar;
 
   // set page design based on user role
   if (userRole === teacherRole) {
@@ -127,9 +132,7 @@ function createCard(exam) {
     if (userRole === teacherRole) {
       window.location.href = `/exam-analysis.html?examID=${exam.id}`;
     } else {
-      // remove it
-      const mockExamID = '689047dc8e73c0cf7b986513';
-      window.location.href = `/exam-results.html?examID=${mockExamID}&userID=${userID}`;
+      window.location.href = `/exam-results.html?examID=${exam.id}&userID=${userID}`;
     }
   });
 

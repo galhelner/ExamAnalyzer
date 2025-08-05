@@ -1,3 +1,29 @@
+/* Question header row for title and points */
+.question-header-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 8px;
+}
+.question-points {
+    flex-shrink: 0;
+    max-width: 28%;
+    text-align: right;
+    word-break: break-word;
+    white-space: pre-line;
+    display: block;
+    font-size: 1rem;
+    color: #a67c52;
+    font-weight: 600;
+    background: #f3e4dd;
+    border-radius: 6px;
+    padding: 4px 6px;
+    margin-left: 12px;
+    min-width: 60px;
+    box-sizing: border-box;
+}
 .answer-option:has(input[type="radio"]:checked) {
     background: #e9d5c0;
     border-color: #a67c52;

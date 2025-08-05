@@ -25,6 +25,11 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Remove the table from the page, only show via popup
     const scoresTableContainer = document.getElementById('student-scores-table-container');
     scoresTableContainer.innerHTML = '';
+
+    // Handle exit button
+    document.getElementById('exit-analysis-btn').addEventListener('click', function () {
+        window.location.href = '/';
+    });
 });
 
 async function fetchExamData(examID) {
@@ -55,12 +60,20 @@ function renderAnalysis(exam) {
         return counts;
     });
 
+    const firstQuestionPoints = Math.ceil(100 / exam.questions.length);
+    const questionPoints = (100 - firstQuestionPoints) / (exam.questions.length - 1);
+
     exam.questions.forEach((q, idx) => {
         const block = document.createElement('div');
         block.className = 'result-block';
+        let points = questionPoints;
+        if (idx === 0) {
+            points = firstQuestionPoints;
+        }
         let content = `
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div class="question-header">
                 <span class="question-title">${idx + 1}. ${q.description}</span>
+                <span class="question-points">${points} pts</span>
             </div>
             <div class="answers-list">
                 ${q.options.map((ans, aIdx) => {

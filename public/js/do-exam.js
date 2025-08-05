@@ -102,7 +102,10 @@ function renderQuestions(exam) {
         const block = document.createElement('div');
         block.className = 'question-block';
         block.innerHTML = `
-            <span class="question-title">${idx + 1}. ${q.description}</span>
+            <div class="question-header-row">
+                <span class="question-title">${idx + 1}. ${q.description}</span>
+                <span class="question-points">${q.points} pts</span>
+            </div>
             <div class="answers">
                 ${shuffledOptions.map((ans, aIdx) => `
                     <div class="answer-option" onclick="this.querySelector('input[type=radio]').checked = true;">

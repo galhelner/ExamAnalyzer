@@ -67,7 +67,8 @@ exports.createExam = async (req, res) => {
         title: examName,
         questions: questions.map(q => ({
             description: q.description,
-            options: q.answers
+            options: q.answers,
+            points: q.points
         })),
         createdBy: req.user.id,
         examCode: Math.floor(100000 + Math.random() * 900000), // Generate a random exam code

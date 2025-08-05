@@ -132,9 +132,7 @@ function createCard(exam) {
     if (userRole === teacherRole) {
       window.location.href = `/exam-analysis.html?examID=${exam.id}`;
     } else {
-      // remove it
-      const mockExamID = '689047dc8e73c0cf7b986513';
-      window.location.href = `/exam-results.html?examID=${mockExamID}&userID=${userID}`;
+      window.location.href = `/exam-results.html?examID=${exam.id}&userID=${userID}`;
     }
   });
 

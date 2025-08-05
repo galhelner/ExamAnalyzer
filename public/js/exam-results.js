@@ -1,3 +1,17 @@
+function blockBackNavigation() {
+  window.history.pushState(null, '', window.location.href);
+  window.history.pushState(null, '', window.location.href);
+
+  window.addEventListener('popstate', function(event) {
+    // Push states again to prevent back
+    window.history.pushState(null, '', window.location.href);
+    console.log('Back navigation blocked');
+    window.location.href = '/';
+  });
+}
+
+blockBackNavigation();
+
 document.addEventListener('DOMContentLoaded', async function () {
     // get the examID and userID from query string
     const urlParams = new URLSearchParams(window.location.search);
@@ -17,9 +31,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Set title
     document.title = exam.title;
     document.getElementById('exam-title').textContent = exam.title;
+    document.getElementById('exam-teacher').textContent = `Teacher: ${exam.createdBy.fullName}`;
 
     // set score with indicator
-    console.log('Exam data:', exam);
     const submission = exam.submittions.find(sub => sub.userId._id.toString() === userID);
     const score = submission ? Math.ceil(submission.score) : 0;
     const scoreBlock = document.getElementById('score-block');

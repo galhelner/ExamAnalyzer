@@ -2,13 +2,21 @@
 const urlParams = new URLSearchParams(window.location.search);
 const examID = urlParams.get('examID');
 
-// push initial state to history to detect back button click
-window.history.pushState(null, '', window.location.href);
+const userID = sessionStorage.getItem('userID');
 
-// prevent exit exam by clicking the back button
-window.addEventListener('popstate', function (event) {
+function blockBackNavigation() {
+  window.history.pushState(null, '', window.location.href);
+  window.history.pushState(null, '', window.location.href);
+
+  window.addEventListener('popstate', function(event) {
+    // Push states again to prevent back
+    window.history.pushState(null, '', window.location.href);
+    console.log('Back navigation blocked');
     confirmExitExam();
-});
+  });
+}
+
+blockBackNavigation();
 
 document.addEventListener('DOMContentLoaded', async function () {
     // Fetch exam data from server
@@ -53,8 +61,10 @@ function confirmExitExam() {
             await submitEmptyExam(examID);
             setTimeout(() => {
                 // redirect to home page after a short delay to ensure submission commited
-                window.location.href = '/';
+                window.location.replace('/');
             }, 500);
+        } else {
+            window.history.pushState(null, '', window.location.href); // restore state
         }
     });
 }
@@ -149,10 +159,22 @@ async function submitExam(e, examID, exam) {
                 const score = result.data;
                 Swal.fire({
                     title: 'Exam Submitted',
-                    text: `Your score is ${score}`,
-                    icon: 'success'}
-                ).then(() => {
-                    window.location.href = '/';
+                    icon: 'success',
+                    html: `
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+                        <button id="btn-ok" class="swal2-confirm swal2-styled">OK</button>
+                        <button id="btn-view-results" class="swal2-confirm swal2-styled">View Results</button>
+                    </div>`,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        document.getElementById('btn-view-results').addEventListener('click', () => {
+                            window.location.href = `/exam-results.html?examID=${examID}&userID=${userID}`;
+                        });
+                        document.getElementById('btn-ok').addEventListener('click', () => {
+                            window.location.href = '/';
+                        });
+                    }
                 });
             } else {
                 alert(result.message || 'Submission failed.');

@@ -153,11 +153,18 @@ body {
 }
 
 h1 {
-    margin-bottom: 32px;
+    margin: 0;
     color: #3a2c1a;
     letter-spacing: 1px;
     font-size: 2.2rem;
     font-weight: 700;
+    text-align: center;
+}
+
+.exam-teacher-text {
+    font-size: 1.3rem;
+    color: #5a4633;
+    margin: 20px 0 20px 0;
     text-align: center;
 }
 

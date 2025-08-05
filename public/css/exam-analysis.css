@@ -1,3 +1,10 @@
+/* Animation for copy button when clicked */
+.copy-btn.clicked {
+    transform: scale(0.9);
+    background-color: #e0e0e0;
+    box-shadow: 0 0 8px #a67c52;
+    transition: all 0.2s;
+}
 .answer-label {
     display: block;
     margin-bottom: 5px;

@@ -214,9 +214,21 @@ function renderInProgressStateActions(exam, container) {
         copyButton.className = 'copy-btn';
         copyButton.innerHTML = '<img src="images/copy-icon.png" alt="Copy">'; // Placeholder for copy icon
         copyButton.onclick = () => {
-            codeInput.select();
-            document.execCommand('copy');
-            alert('Exam code copied to clipboard!');
+            // Copy code to clipboard without selecting the input
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(codeInput.value);
+            } else {
+                // Fallback for older browsers
+                codeInput.setAttribute('readonly', '');
+                codeInput.select();
+                document.execCommand('copy');
+                window.getSelection().removeAllRanges();
+            }
+            // Animate button to show it was clicked
+            copyButton.classList.add('clicked');
+            setTimeout(() => {
+                copyButton.classList.remove('clicked');
+            }, 300);
         };
 
         // Add input and copy button to the wrapper

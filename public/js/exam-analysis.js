@@ -227,10 +227,10 @@ function renderInProgressStateActions(exam, container) {
     codeContainer.appendChild(buttonsDiv);
     
     showGroupsBtn.onclick = () => {
-        showTablePopup(renderStudentScoresTable(exam, true));
+        showTablePopup(renderGroupTbl(exam, true));
     };
     showGradesBtn.onclick = () => {
-        showTablePopup(renderAltStudentTable(exam));
+        showTablePopup(renderGradesTbl(exam));
     };
 
     // Add the code container
@@ -280,7 +280,7 @@ function renderInProgressStateActions(exam, container) {
     container.appendChild(inProgressContainer);
 }
 
-function renderStudentScoresTable(exam, asElement = false) {
+function renderGroupTbl(exam, asElement = false) {
     if (exam.status !== 'in_progress' && exam.status !== 'done') {
         return null;
     }
@@ -328,7 +328,7 @@ function renderStudentScoresTable(exam, asElement = false) {
     return tableWrapper;
 }
 
-function renderAltStudentTable(exam) {
+function renderGradesTbl(exam) {
     if (exam.status !== 'in_progress' && exam.status !== 'done') {
         return null;
     }

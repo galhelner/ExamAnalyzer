@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Render exams on the page
 function renderExams(exams) {
+  console.log('Rendering exams:', exams);
   if (!exams || exams.length === 0) {
     const noExamsMessage = document.createElement('p');
     noExamsMessage.innerText = 'You have no submitted exams yet.';

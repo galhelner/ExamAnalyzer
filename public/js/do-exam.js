@@ -48,10 +48,13 @@ function confirmExitExam() {
         showCancelButton: true,
         confirmButtonText: 'Yes, exit',
         cancelButtonText: 'No, stay'
-    }).then((result) => {
+    }).then(async (result) => {
         if (result.isConfirmed) {
-            submitEmptyExam(examID);
-            window.location.href = '/';
+            await submitEmptyExam(examID);
+            setTimeout(() => {
+                // redirect to home page after a short delay to ensure submission commited
+                window.location.href = '/';
+            }, 500);
         }
     });
 }
@@ -102,7 +105,7 @@ function renderQuestions(exam) {
     });
 }
 
-function submitEmptyExam(examID) {
+async function submitEmptyExam(examID) {
     fetch('/exams/submit-exam', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

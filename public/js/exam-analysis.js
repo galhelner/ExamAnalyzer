@@ -246,11 +246,26 @@ function renderInProgressStateActions(exam, container) {
     const showGradesBtn = document.createElement('button');
     showGradesBtn.textContent = 'Show Grading';
     showGradesBtn.className = 'btn popup-btn same-size-btn';
+    // Check if there are any submissions
+    const noSubmissions = !exam.submittions || exam.submittions.length === 0;
+    if (noSubmissions) {
+        showGroupsBtn.disabled = true;
+        showGradesBtn.disabled = true;
+        showGroupsBtn.classList.add('disabled-btn');
+        showGradesBtn.classList.add('disabled-btn');
+    }
     
     const buttonsDiv = document.createElement('div');
     buttonsDiv.className = 'popup-buttons';
     buttonsDiv.appendChild(showGroupsBtn);
     buttonsDiv.appendChild(showGradesBtn);
+    // Add grayed text if no submissions
+    if (noSubmissions) {
+        const noSubText = document.createElement('div');
+        noSubText.textContent = 'No students have submitted the exam yet';
+        noSubText.className = 'no-submissions-text';
+        buttonsDiv.insertBefore(noSubText, buttonsDiv.firstChild);
+    }
     codeContainer.appendChild(buttonsDiv);
     
     showGroupsBtn.onclick = () => {

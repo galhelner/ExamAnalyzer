@@ -1,4 +1,17 @@
 /* Animation for copy button when clicked */
+.disabled-btn {
+    opacity: 0.6;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.no-submissions-text {
+    color: #888;
+    font-size: 0.95em;
+    margin-top: 8px;
+    text-align: center;
+    font-style: italic;
+}
 .copy-btn.clicked {
     transform: scale(0.9);
     background-color: #e0e0e0;

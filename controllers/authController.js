@@ -6,10 +6,13 @@ require('dotenv').config();
 // register functionality
 exports.register = async (req, res) => {
   const { fullName, email, password, role } = req.body;
-  console.log('Registering user:', { fullName, email, role });
   try {
     // hash the password
     const hashed = await bcrypt.hash(password, 10);
+
+    // check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) return res.status(400).json({ success: false, message: `User with email: ${email} already exists` });
 
     // create a new user in mongoDB
     const user = new User({ fullName, email, password: hashed, role });
@@ -28,7 +31,8 @@ exports.register = async (req, res) => {
     
     res.status(201).json({ success: true, message: 'User registered' });
   } catch (err) {
-    res.status(400).json({ success: false, message: 'User already exists or invalid data' });
+    console.error('Error during registration:', err);
+    res.status(500).json({ success: false, message: 'Server Failed to register the user' });
   }
 }
 

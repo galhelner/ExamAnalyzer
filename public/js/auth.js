@@ -133,10 +133,11 @@ async function register() {
                 credentials: 'include', // Include cookies for session management
             });
 
-            if (!res.ok) throw new Error(`Status: ${res.status}`);
-
             const data = await res.json();
-            console.log(data);
+
+             if (!res.ok) {
+                throw new Error(data.message || 'Registration failed');
+            }
 
             // Redirect to home page on successful registration
             window.location.href = '/';
@@ -145,7 +146,7 @@ async function register() {
             Swal.fire({
                 icon: 'error',
                 title: 'Registration Failed',
-                text: 'Please check your details and try again.',
+                text: error.message,
             });
         }
 }

@@ -116,6 +116,13 @@ function renderPrivateStateActions(exam, container) {
     const privateBtnContainer = document.createElement('div');
     privateBtnContainer.className = 'private-btn-container';
 
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Edit Exam';
+    editButton.className = 'btn edit-btn';
+    editButton.onclick = () => {
+        window.location.href = `/exam-edit.html?examID=${exam._id}`;
+    };
+
     const deleteButton = document.createElement('button');
     deleteButton.textContent = 'Delete Exam';
     deleteButton.className = 'btn delete-btn';
@@ -188,6 +195,7 @@ function renderPrivateStateActions(exam, container) {
         }
     };
 
+    privateBtnContainer.appendChild(editButton);
     privateBtnContainer.appendChild(deleteButton);
     privateBtnContainer.appendChild(publishButton);
     container.appendChild(privateBtnContainer);
@@ -218,11 +226,21 @@ function renderInProgressStateActions(exam, container) {
 
         const copyButton = document.createElement('button');
         copyButton.className = 'copy-btn';
-        copyButton.innerHTML = '<img src="images/copy-icon.png" alt="Copy">'; // Placeholder for copy icon
+        copyButton.innerHTML = `
+            <img src="images/copy-icon.png" alt="Copy">
+            <div class="checkmark"></div>
+        `; 
         copyButton.onclick = async () => {
             try {
                 // modern async clipboard API
                 await navigator.clipboard.writeText(codeInput.value);
+                
+                // Show checkmark animation
+                copyButton.classList.add('show-checkmark');
+                setTimeout(() => {
+                    copyButton.classList.remove('show-checkmark');
+                }, 600);
+                
             } catch (err) {
                 console.warn('Clipboard API failed, please copy manually', err);
                 // fallback: select the text and prompt user

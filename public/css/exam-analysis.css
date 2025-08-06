@@ -19,6 +19,55 @@
     transition: all 0.2s;
 }
 
+/* V checkmark animation */
+.copy-btn .checkmark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.copy-btn .checkmark::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 10px;
+    border: solid #28a745;
+    border-width: 0 3px 3px 0;
+    transform: translate(-50%, -60%) rotate(45deg);
+    top: 50%;
+    left: 50%;
+}
+
+.copy-btn.show-checkmark .checkmark {
+    opacity: 1;
+    animation: checkmarkPop 0.6s ease-out;
+}
+
+.copy-btn.show-checkmark img {
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+@keyframes checkmarkPop {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
 
 .answer-row {
     padding: 0.7em 1em;
@@ -339,6 +388,13 @@ body.popup-open {
     color: #fff;
 }
 
+.edit-btn {
+    background-color: #3498db;
+}
+.edit-btn:hover {
+    background-color: #2980b9;
+}
+
 .delete-btn {
     background-color: #e74c3c;
 }
@@ -381,6 +437,7 @@ body.popup-open {
 }
 
 .copy-btn {
+    position: relative;
     padding: 8px;
     border: 1.5px solid #e2d3c2;
     background: #fff;

@@ -126,6 +126,15 @@ function createExam(e) {
         questions
     };
 
+    Swal.fire({
+        title: 'Creating Exam...',
+        text: 'Please wait while we create your exam.',
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
     fetch('/exams/create-exam', {
         method: 'POST',
         headers: {

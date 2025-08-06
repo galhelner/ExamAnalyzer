@@ -150,6 +150,15 @@ async function submitExam(e, examID, exam) {
         answers.push(answerIndex);
     });
 
+    Swal.fire({
+        title: 'Submitting Exam...',
+        text: 'Please wait while we submit your answers.',
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
     // Send answers to server
     fetch('/exams/submit-exam', {
         method: 'POST',

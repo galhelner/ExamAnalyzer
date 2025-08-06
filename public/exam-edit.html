@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/create-exam.css">
+    <link rel="stylesheet" href="css/update-exam.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Create Exam</title>
+    <title>Edit Exam</title>
 </head>
 <body>
-    <h1>Create Exam</h1>
+    <h1>Edit Exam</h1>
     <div class="form-container">
-        <form id="create-exam-form">
+        <form id="edit-exam-form">
             <div>
                 <input type="text" id="exam-name" placeholder="Exam Name" name="exam-name" required>
                 <p id="exam-name-error" class="exam-name-error-message">Exam name is limited for 40 characters!</p>
@@ -20,9 +20,9 @@
             </div>
             <button type="button" id="add-question-btn">Add Question</button>
             <button type="button" id="set-points-evenly-btn" class="set-points-evenly-btn">Set Points Evenly</button>
-            <button type="submit">Update Exam</button>
+            <button type="submit">Create Exam</button>
         </form>
     </div>
-    <script src="js/create-exam.js"></script>
+    <script src="js/edit-exam.js"></script>
 </body>
 </html>

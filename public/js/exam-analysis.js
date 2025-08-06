@@ -226,11 +226,21 @@ function renderInProgressStateActions(exam, container) {
 
         const copyButton = document.createElement('button');
         copyButton.className = 'copy-btn';
-        copyButton.innerHTML = '<img src="images/copy-icon.png" alt="Copy">'; 
+        copyButton.innerHTML = `
+            <img src="images/copy-icon.png" alt="Copy">
+            <div class="checkmark"></div>
+        `; 
         copyButton.onclick = async () => {
             try {
                 // modern async clipboard API
                 await navigator.clipboard.writeText(codeInput.value);
+                
+                // Show checkmark animation
+                copyButton.classList.add('show-checkmark');
+                setTimeout(() => {
+                    copyButton.classList.remove('show-checkmark');
+                }, 600);
+                
             } catch (err) {
                 console.warn('Clipboard API failed, please copy manually', err);
                 // fallback: select the text and prompt user

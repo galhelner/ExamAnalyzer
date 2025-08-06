@@ -226,7 +226,7 @@ function renderInProgressStateActions(exam, container) {
 
         const copyButton = document.createElement('button');
         copyButton.className = 'copy-btn';
-        copyButton.innerHTML = '<img src="images/copy-icon.png" alt="Copy">'; // Placeholder for copy icon
+        copyButton.innerHTML = '<img src="images/copy-icon.png" alt="Copy">'; 
         copyButton.onclick = async () => {
             try {
                 // modern async clipboard API

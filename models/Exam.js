@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Counter = require('./Counter'); // Import the Counter model
 
 const examSchema = new mongoose.Schema({
     title: { type: String, required: true },
@@ -25,5 +26,25 @@ const examSchema = new mongoose.Schema({
 
 // Add an index to the userId within the submittions array for faster lookups for students.
 examSchema.index({ 'submittions.userId': 1 });
+
+// Auto-generate examCode before validation
+examSchema.pre('validate', async function(next) {
+    if (this.isNew && !this.examCode) {
+        try {
+            const counter = await Counter.findOneAndUpdate(
+                { name: 'examCode' },
+                { $inc: { value: 1 } },
+                { new: true, upsert: true }
+            );
+            // Convert to 6-digit string
+            this.examCode = counter.value.toString().padStart(6, '0');
+            next();
+        } catch (err) {
+            next(err);
+        }
+    } else {
+        next();
+    }
+});
 
 module.exports = mongoose.model('Exam', examSchema);

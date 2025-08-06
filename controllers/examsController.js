@@ -71,7 +71,6 @@ exports.createExam = async (req, res) => {
             points: q.points
         })),
         createdBy: req.user.id,
-        examCode: Math.floor(100000 + Math.random() * 900000), // Generate a random exam code
         status: 'private'
     });
 

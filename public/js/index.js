@@ -42,6 +42,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Render exams on the page
     renderExams(examsData.data);
+
+    // Show the exams grid
+    grid.classList.remove('hidden');
+    document.getElementById('loadingAnimation').classList.add('hidden');
+
   } catch (error) {
     console.error('Error fetching exams:', error);
     // Optionally show an error message to the user

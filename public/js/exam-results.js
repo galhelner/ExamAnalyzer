@@ -48,6 +48,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Render question results
     renderQuestions(exam, userID);
 
+    // Show results container
+    const resultsContainer = document.querySelector('.results-container');
+    resultsContainer.classList.remove('hidden');
+
     // Handle exit button
     document.getElementById('exit-results-btn').addEventListener('click', function () {
         window.location.href = '/';

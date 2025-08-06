@@ -1,7 +1,21 @@
 let questionCount = 0;
 const maxExamNameLength = 40;
+let currentExamId = null;
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
+    // Get exam ID from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    currentExamId = urlParams.get('examID');
+
+    if (!currentExamId) {
+        alert('Exam ID is missing.');
+        window.location.href = '/';
+        return;
+    }
+
+    // Load existing exam data
+    await loadExamData(currentExamId);
+
     const examNameInput = document.getElementById('exam-name');
     const examNameError = document.getElementById('exam-name-error');
 
@@ -13,6 +27,61 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+async function loadExamData(examId) {
+    try {
+        const response = await fetch(`/exams/${examId}`);
+        if (!response.ok) {
+            throw new Error('Failed to load exam data.');
+        }
+        const result = await response.json();
+        
+        if (!result.success) {
+            throw new Error(result.message || 'Failed to load exam data.');
+        }
+
+        const exam = result.data;
+        
+        // Populate exam name
+        document.getElementById('exam-name').value = exam.title;
+        
+        // Clear existing questions and populate with exam data
+        const questionsContainer = document.getElementById('questions-container');
+        questionsContainer.innerHTML = '';
+        
+        exam.questions.forEach((question, index) => {
+            const questionElement = createQuestionElement(index);
+            
+            // Populate question data
+            questionElement.querySelector('textarea[name*="[description]"]').value = question.description;
+            questionElement.querySelector('.question-points').value = question.points;
+            
+            // Populate answers
+            const answerInputs = questionElement.querySelectorAll('.answers textarea');
+            question.options.forEach((option, optionIndex) => {
+                if (answerInputs[optionIndex]) {
+                    answerInputs[optionIndex].value = option;
+                }
+            });
+            
+            // Trigger auto-expand for textareas
+            questionElement.querySelectorAll('textarea.auto-expand').forEach(textarea => {
+                textarea.style.height = '2.5em';
+                if (textarea.value.length > 0 && textarea.scrollHeight > textarea.offsetHeight) {
+                    textarea.style.height = 'auto';
+                    textarea.style.height = Math.min(textarea.scrollHeight, 180) + 'px';
+                }
+            });
+            
+            questionsContainer.appendChild(questionElement);
+        });
+        
+    } catch (error) {
+        console.error('Error loading exam data:', error);
+        alert('Failed to load exam data: ' + error.message);
+        window.location.href = '/';
+    }
+}
 
 function createQuestionElement(index) {
     const div = document.createElement('div');
@@ -70,13 +139,14 @@ document.getElementById('add-question-btn').onclick = function () {
     container.appendChild(createQuestionElement(container.children.length));
 };
 
-// Add the first question by default
-window.onload = function () {
-    document.getElementById('add-question-btn').click();
-};
-
-function createExam(e) {
+function updateExam(e) {
     e.preventDefault();
+    
+    if (!currentExamId) {
+        alert('Exam ID is missing.');
+        return;
+    }
+    
     const examName = document.getElementById('exam-name').value.trim();
     if (examName.length > maxExamNameLength) {
         Swal.fire({
@@ -99,7 +169,7 @@ function createExam(e) {
         const points = parseInt(pointsInput.value, 10);
         if (isNaN(points) || points < 1) pointsValid = false;
         totalPoints += points;
-        questions.push({ description: questionText, answers, points });
+        questions.push({ description: questionText, answers: answers, points });
     });
 
     if (questions.length === 0) {
@@ -121,17 +191,17 @@ function createExam(e) {
         return;
     }
 
-    const data = {
-        examName,
-        questions
+    const examData = {
+        title: examName,
+        questions: questions
     };
 
-    fetch('/exams/create-exam', {
-        method: 'POST',
+    fetch(`/exams/${currentExamId}`, {
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ examData }),
         credentials: 'include'
     })
     .then(response => response.json())
@@ -139,31 +209,37 @@ function createExam(e) {
         if (result.success) {
             Swal.fire({
                 title: 'Success!',
-                text: 'Exam created successfully!',
+                text: 'Exam updated successfully!',
                 icon: 'success',
                 confirmButtonText: 'OK'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = '/';
+                    // Redirect back to exam analysis page
+                    window.location.href = `/exam-analysis.html?examID=${currentExamId}`;
                 }
             });
         } else {
             Swal.fire({
                 title: 'Error!',
-                text: result.message || 'Failed to create exam.',
+                text: result.message || 'Failed to update exam.',
                 icon: 'error',
                 confirmButtonText: 'OK'
             });
         }
     })
     .catch(err => {
-        alert('Error creating exam.');
+        Swal.fire({
+            title: 'Error!',
+            text: 'Error updating exam.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
         console.error(err);
     });
 }
 
 // Attach submit event to form
-document.getElementById('create-exam-form').addEventListener('submit', createExam);
+document.getElementById('edit-exam-form').addEventListener('submit', updateExam);
 
 // Set Points Evenly button logic
 document.getElementById('set-points-evenly-btn').onclick = function () {

@@ -116,6 +116,13 @@ function renderPrivateStateActions(exam, container) {
     const privateBtnContainer = document.createElement('div');
     privateBtnContainer.className = 'private-btn-container';
 
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Edit Exam';
+    editButton.className = 'btn edit-btn';
+    editButton.onclick = () => {
+        window.location.href = `/exam-edit.html?examID=${exam._id}`;
+    };
+
     const deleteButton = document.createElement('button');
     deleteButton.textContent = 'Delete Exam';
     deleteButton.className = 'btn delete-btn';
@@ -188,6 +195,7 @@ function renderPrivateStateActions(exam, container) {
         }
     };
 
+    privateBtnContainer.appendChild(editButton);
     privateBtnContainer.appendChild(deleteButton);
     privateBtnContainer.appendChild(publishButton);
     container.appendChild(privateBtnContainer);

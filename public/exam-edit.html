@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/edit-exam.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Edit Exam</title>
+</head>
+<body>
+    <h1>Edit Exam</h1>
+    <div class="form-container">
+        <form id="edit-exam-form">
+            <div>
+                <input type="text" id="exam-name" placeholder="Exam Name" name="exam-name" required>
+                <p id="exam-name-error" class="exam-name-error-message">Exam name is limited for 40 characters!</p>
+            </div>
+            <div id="questions-container">
+                <!-- Questions will be added here -->
+            </div>
+            <button type="button" id="add-question-btn">Add Question</button>
+            <button type="button" id="set-points-evenly-btn" class="set-points-evenly-btn">Set Points Evenly</button>
+            <button type="submit">Update Exam</button>
+        </form>
+    </div>
+    <script src="js/edit-exam.js"></script>
+</body>
+</html>

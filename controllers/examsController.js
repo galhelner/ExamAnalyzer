@@ -120,17 +120,36 @@ exports.deleteExam = async (req, res) => {
 
 exports.editExam = async (req, res) => {
     const examId = req.params.id;
-    const examData = req.body.examData;
+    const { examData } = req.body;
 
-    // find the exam by ID in mongoDB and update it
-    await Exam.replaceOne({ _id: examId }, examData)
-        .then(() => {
-            res.status(200).json({ success: true, message: 'Exam updated successfully!' });
-        })
-        .catch(err => {
-            console.error('Error updating exam:', err);
-            res.status(500).json({ success: false, message: 'Failed to update exam.' });
-        });
+    try {
+        // check if exam exists and user owns it
+        const exam = await Exam.findById(examId);
+        if (!exam) {
+            return res.status(404).json({ success: false, message: 'Exam not found.' });
+        }
+
+        // Only allow editing of private exams
+        if (exam.status !== 'private') {
+            return res.status(400).json({ success: false, message: 'Only private exams can be edited.' });
+        }
+
+        // Only update specific fields, preserving important metadata
+        const updateData = {
+            title: examData.title,
+            questions: examData.questions.map(q => ({
+                description: q.description,
+                options: q.answers, // Convert answers to options for storage
+                points: q.points
+            }))
+        };
+
+        await Exam.updateOne({ _id: examId }, updateData);
+        res.status(200).json({ success: true, message: 'Exam updated successfully!' });
+    } catch (err) {
+        console.error('Error updating exam:', err);
+        res.status(500).json({ success: false, message: 'Failed to update exam.' });
+    }
 }
 
 exports.submitExam = async (req, res) => {

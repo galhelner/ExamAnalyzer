@@ -339,6 +339,13 @@ body.popup-open {
     color: #fff;
 }
 
+.edit-btn {
+    background-color: #3498db;
+}
+.edit-btn:hover {
+    background-color: #2980b9;
+}
+
 .delete-btn {
     background-color: #e74c3c;
 }

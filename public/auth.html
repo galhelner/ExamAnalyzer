@@ -14,7 +14,10 @@
         <div class="form-box">
             <h2 id="formTitle">Login</h2>
             <form id="authForm">
-                <input id="authFullName" class="hidden" type="text" pattern="[A-Za-z]*" title="Letters only" oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '')" placeholder="Full Name">
+                <div class="name-container">
+                    <input id="authFullName" class="hidden" type="text" pattern="[A-Za-z ]*" title="Letters only" oninput="this.value = this.value.replace(/[^a-zA-Z ]/g, '')" placeholder="Full Name">
+                    <p id="fullNameError" class="hidden">Full name is limited for 30 characters!</p>
+                </div>
                 <input id="authEmail" type="email" placeholder="Email" required>
                 <input id="authPassword" type="password" placeholder="Password" minlength="6" required>
                 <div id="roleSelector" class="role-selector">

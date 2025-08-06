@@ -7,7 +7,9 @@ const roleSelector = document.getElementById('roleSelector');
 const roleDropdown = document.getElementById('role');
 const submitButton = document.getElementById('submit');
 const authFullName = document.getElementById('authFullName');
+const fullNameError = document.getElementById('fullNameError');
 let isLogin = true;
+const maxFullNameLength = 30;
 
 document.addEventListener('DOMContentLoaded', () => {
     const authForm = document.getElementById('authForm');
@@ -18,6 +20,16 @@ document.addEventListener('DOMContentLoaded', () => {
             await login();
         } else {
             await register();
+        }
+    });
+
+    authFullName.addEventListener('input', () => {
+        if (authFullName.value.length > maxFullNameLength) {
+            fullNameError.classList.remove('hidden');
+            authFullName.classList.add('name-error');
+        } else {
+            fullNameError.classList.add('hidden');
+            authFullName.classList.remove('name-error');
         }
     });
 });
@@ -90,6 +102,20 @@ async function login() {
 
 // registration submission handler
 async function register() {
+    // Validate full name length
+    if (authFullName.value.length > maxFullNameLength) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid Full Name',
+            text: `Full name is limited for ${maxFullNameLength} characters!`,
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    // remove extra spaces from full name
+    authFullName.value = authFullName.value.trim().replace(/\s+/g, ' ');
+
     const payload = {
             fullName: authFullName.value,
             email: authForm.authEmail.value,

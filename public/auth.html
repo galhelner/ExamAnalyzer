@@ -20,12 +20,15 @@
                 </div>
                 <input id="authEmail" type="email" placeholder="Email" required>
                 <input id="authPassword" type="password" placeholder="Password" minlength="6" required>
-                <div id="roleSelector" class="role-selector">
-                    <select id="role" name="role">
-                        <option value="" disabled selected>Select your role</option>
-                        <option value="student">Student</option>
-                        <option value="teacher">Teacher</option>
-                    </select>
+                <div id="roleSelector" class="role-selector hidden">
+                    <div id="selectStudent" class="role-option">
+                        <img src="images/student-icon.png" alt="Student Icon">
+                        <label>Student</label>
+                    </div>
+                    <div id="selectTeacher" class="role-option">
+                        <img src="images/teacher-icon.png" alt="Teacher Icon">
+                        <label>Teacher</label>
+                    </div>
                 </div>
                 <button id="submit" type="submit">Login</button>
             </form>

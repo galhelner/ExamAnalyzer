@@ -4,7 +4,6 @@ const formTitle = document.getElementById('formTitle');
 const infoTitle = document.getElementById('infoTitle');
 const infoText = document.getElementById('infoText');
 const roleSelector = document.getElementById('roleSelector');
-const roleDropdown = document.getElementById('role');
 const submitButton = document.getElementById('submit');
 const authFullName = document.getElementById('authFullName');
 const fullNameError = document.getElementById('fullNameError');
@@ -32,6 +31,19 @@ document.addEventListener('DOMContentLoaded', () => {
             authFullName.classList.remove('name-error');
         }
     });
+
+    // Role selection event listeners
+    document.getElementById('selectStudent').addEventListener('click', () => {
+        document.querySelectorAll('.role-option').forEach(el => el.classList.remove('selected-role-option'));
+        document.getElementById('selectStudent').classList.add('selected-role-option');
+        roleSelector.dataset.role = 'student';
+    });
+
+    document.getElementById('selectTeacher').addEventListener('click', () => {
+        document.querySelectorAll('.role-option').forEach(el => el.classList.remove('selected-role-option'));
+        document.getElementById('selectTeacher').classList.add('selected-role-option');
+        roleSelector.dataset.role = 'teacher';
+    });
 });
 
 toggleButton.addEventListener('click', (e) => {
@@ -46,9 +58,7 @@ toggleButton.addEventListener('click', (e) => {
     infoTitle.textContent = 'Join Us!';
     infoText.textContent = 'Sign up and explore our platform.';
     toggleButton.textContent = 'Login';
-    roleSelector.style.display = 'flex';
-    roleDropdown.disabled = false;
-    roleDropdown.required = true;
+    roleSelector.classList.remove('hidden');
     authFullName.classList.remove('hidden');
     authFullName.required = true;
   } else {
@@ -58,9 +68,7 @@ toggleButton.addEventListener('click', (e) => {
     infoTitle.textContent = 'Welcome Back!';
     infoText.textContent = 'Login to continue your journey.';
     toggleButton.textContent = 'Register';
-    roleSelector.style.display = 'none';
-    roleDropdown.disabled = true;
-    roleDropdown.required = false;
+    roleSelector.classList.add('hidden');
     authFullName.classList.add('hidden');
     authFullName.required = false;
   }
@@ -113,6 +121,17 @@ async function register() {
         return;
     }
 
+    // validate role selection
+    if (!roleSelector.dataset.role) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Role Selection Required',
+            text: 'Please select your role (Student or Teacher).',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
     // remove extra spaces from full name
     authFullName.value = authFullName.value.trim().replace(/\s+/g, ' ');
 
@@ -120,7 +139,7 @@ async function register() {
             fullName: authFullName.value,
             email: authForm.authEmail.value,
             password: authForm.authPassword.value,
-            role: authForm.role.value,
+            role: roleSelector.dataset.role,
         };
 
         try {

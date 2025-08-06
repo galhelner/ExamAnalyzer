@@ -75,16 +75,14 @@ exports.createExam = async (req, res) => {
         status: 'private'
     });
 
-    // save the exam to the database
-    await exam.save()
-        .then(() => {
-            res.status(201).json({ success: true, message: 'Exam created successfully!' });
-        })
-        .catch(err => {
-            console.error('Error creating exam:', err);
-            res.status(500).json({ success: false, message: 'Failed to create exam.' });
-        });
-}
+    try {
+        const savedExam = await exam.save();
+        res.status(201).json({ success: true, message: 'Exam created successfully!', examId: savedExam._id });
+    } catch (err) {
+        console.error('Error creating exam:', err);
+        res.status(500).json({ success: false, message: 'Failed to create exam.' });
+    }
+};
 
 exports.getExamById = async (req, res) => {
     const examId = req.params.id;

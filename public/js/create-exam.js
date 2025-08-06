@@ -151,9 +151,9 @@ function createExam(e) {
                 text: 'Exam created successfully!',
                 icon: 'success',
                 confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '/';
+            }).then((dialogResult) => {
+                if (dialogResult.isConfirmed) {
+                    window.location.href = `/exam-analysis.html?examID=${result.examId}`;
                 }
             });
         } else {

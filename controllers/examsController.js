@@ -182,11 +182,12 @@ exports.submitExam = async (req, res) => {
 
 function calculateScore(exam, answers) {
     let score = 0;
-    const questionsCount = exam.questions.length;
-    const questionScore = 100 / questionsCount; // Assuming each question is worth equal points
+    let totalPoints = 0;
     exam.questions.forEach((question, index) => {
+        totalPoints += question.points;
+        // Assuming the first option is the correct answer
         if (question.options[answers[index]] === question.options[0]) {
-            score += questionScore; // Assuming the first option is the correct answer
+            score += question.points;
         }
     });
     return Math.ceil(score);

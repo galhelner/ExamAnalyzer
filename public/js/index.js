@@ -55,10 +55,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Render exams on the page
 function renderExams(exams) {
-  console.log('Rendering exams:', exams);
+  const userRole = sessionStorage.getItem('userRole');
   if (!exams || exams.length === 0) {
     const noExamsMessage = document.createElement('p');
-    noExamsMessage.innerText = 'You have no submitted exams yet.';
+    noExamsMessage.innerText = userRole === teacherRole ? "You haven't created any exams yet." : "You haven't submitted any exams yet.";
     noExamsMessage.classList.add('no-exams-message');
     grid.appendChild(noExamsMessage);
     return;

@@ -13,3 +13,8 @@
 - **Phone Number:** 0547901530
 - **Email:** galhelner@gmail.com
 - **ID:** 318462629
+
+
+### IMPORTANT!
+- **Before Running:** run command "npm install" to install all required dependencies
+- **Run Command:** "node app.js"

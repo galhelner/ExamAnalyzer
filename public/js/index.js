@@ -93,20 +93,24 @@ function createGradeElement(grade) {
 // Create a status element for an exam
 function createStatusElement(status) {
   const statusElement = document.createElement('div');
-  statusElement.title = status;
-  statusElement.style.width = '20px';
-  statusElement.style.height = '20px';
-  statusElement.style.borderRadius = '50%';
-  statusElement.style.marginTop = '10px';
+  statusElement.classList.add('status-label');
 
+  let text = '';
   if (status === 'private') {
-    statusElement.style.backgroundColor = 'red';
+    statusElement.classList.add('status-private');
+    text = 'Private';
   } else if (status === 'in_progress') {
-    statusElement.style.backgroundColor = 'yellow';
+    statusElement.classList.add('status-in-progress');
+    text = 'In Progress';
   } else if (status === 'done') {
-    statusElement.style.backgroundColor = 'green';
+    statusElement.classList.add('status-done');
+    text = 'Done';
+  } else {
+    text = status || '';
   }
 
+  statusElement.textContent = text;
+  statusElement.title = text;
   return statusElement;
 }
 

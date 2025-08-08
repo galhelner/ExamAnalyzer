@@ -121,6 +121,16 @@ h1 {
   font-weight: bold;
 }
 
+/* New: status text badge on cards (teacher view) */
+.status-label {
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.status-private { color: #dc2626; }    /* red */
+.status-in-progress { color: #d97706; } /* amber */
+.status-done { color: #16a34a; }        /* green */
+
 .card:hover {
     filter: brightness(1.05);
     background-color: #f7bba0;

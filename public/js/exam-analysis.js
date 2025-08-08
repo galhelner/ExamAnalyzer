@@ -18,7 +18,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     const exam = examData.data;
     document.title = exam.title;
     document.getElementById('exam-title').textContent = exam.title;
-    
+
+    // NEW: show status label below title
+    const statusHost = document.getElementById('exam-status');
+    const { text, className } = mapStatusToLabel(exam.status);
+    statusHost.textContent = text;
+    statusHost.classList.add(className);
 
     renderQuestions(exam);
     renderExamStateActions(exam);
@@ -34,6 +39,19 @@ document.addEventListener('DOMContentLoaded', async function () {
         window.location.href = '/';
     });
 });
+
+function mapStatusToLabel(status) {
+    switch (status) {
+        case 'private':
+            return { text: 'Private', className: 'status-private' };
+        case 'in_progress':
+            return { text: 'In Progress', className: 'status-in-progress' };
+        case 'done':
+            return { text: 'Done', className: 'status-done' };
+        default:
+            return { text: status || '', className: '' };
+    }
+}
 
 async function fetchExamData(examID) {
     try {

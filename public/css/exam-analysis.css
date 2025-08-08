@@ -1,3 +1,14 @@
+/* Status label below the exam title */
+.exam-status {
+    margin-top: -20px;
+    margin-bottom: 16px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1rem;
+}
+.exam-status.status-private { color: #dc2626; }
+.exam-status.status-in-progress { color: #d97706; }
+.exam-status.status-done { color: #16a34a; }
 
 .disabled-btn {
     opacity: 0.6;

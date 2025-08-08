@@ -98,13 +98,13 @@ function createStatusElement(status) {
   let text = '';
   if (status === 'private') {
     statusElement.classList.add('status-private');
-    text = 'Private';
+    text = 'Not Published';
   } else if (status === 'in_progress') {
     statusElement.classList.add('status-in-progress');
-    text = 'In Progress';
+    text = 'Open For Submission';
   } else if (status === 'done') {
     statusElement.classList.add('status-done');
-    text = 'Done';
+    text = 'Exam Ended';
   } else {
     text = status || '';
   }

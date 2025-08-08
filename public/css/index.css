@@ -85,7 +85,7 @@ h1 {
     align-items: center;
     justify-content: center;
     background-color: #f7d2c1;
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
     border-radius: 8px;
     padding: 1rem;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -123,13 +123,21 @@ h1 {
 
 /* New: status text badge on cards (teacher view) */
 .status-label {
-  margin-top: 10px;
-  font-weight: 600;
-  font-size: 0.95rem;
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    text-align: center;
+    color: white;
+    background-color: #f7d2c1;
+    border: 1px solid #ccc;
+    margin-top: 20px;
+    font-size: 0.95rem;
 }
-.status-private { color: #dc2626; }    /* red */
-.status-in-progress { color: #d97706; } /* amber */
-.status-done { color: #16a34a; }        /* green */
+.status-private { background-color: #dc2626; }    /* red */
+.status-in-progress { background-color: #d97706; } /* amber */
+.status-done { background-color: #16a34a; }        /* green */
 
 .card:hover {
     filter: brightness(1.05);

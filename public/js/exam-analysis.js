@@ -43,11 +43,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 function mapStatusToLabel(status) {
     switch (status) {
         case 'private':
-            return { text: 'Private', className: 'status-private' };
+            return { text: 'Not Published', className: 'status-private' };
         case 'in_progress':
-            return { text: 'In Progress', className: 'status-in-progress' };
+            return { text: 'Open For Submission', className: 'status-in-progress' };
         case 'done':
-            return { text: 'Done', className: 'status-done' };
+            return { text: 'Exam Ended', className: 'status-done' };
         default:
             return { text: status || '', className: '' };
     }
